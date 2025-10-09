@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #271dad 0%, #053f05 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -67,7 +67,7 @@
             left: 0;
             right: 0;
             height: 70px;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(135, 194, 202, 0.98);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
@@ -196,7 +196,8 @@
             top: 70px;
             bottom: 0;
             width: 280px;
-            background: rgba(255, 255, 255, 0.98);
+            background: linear-gradient(135deg, #1c1949 0%, #3c0ea7 100%);
+            min-height: 70vh;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             z-index: 900;
@@ -867,6 +868,15 @@
                     <span class="pending-badge" id="trans-badge">0</span>
                 </div>
             </div>
+            
+             <div class="sidebar-section" id="support-section">
+                <div class="sidebar-section-title">Support</div>
+                <div class="sidebar-nav-item" data-page="reports">
+                    <span class="nav-icon">📋</span>
+                    <span>User Reports</span>
+                    <span class="pending-badge" id="reports-badge">0</span>
+                </div>
+            </div>
 
             <div class="sidebar-section" id="admin-section">
                 <div class="sidebar-section-title">Administration</div>
@@ -883,7 +893,7 @@
 
             <!-- Dashboard Page -->
             <div id="dashboard-content" class="page-content">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">Dashboard Overview</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;;">Dashboard Overview</h2>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -920,7 +930,7 @@
 
             <!-- Super Dashboard -->
             <div id="super-dashboard-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">
                     👑 Super Admin Dashboard
                 </h2>
                 
@@ -961,7 +971,7 @@
 
             <!-- Other pages will be added here -->
             <div id="users-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">User Management</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">User Management</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">All Users</h3>
@@ -986,7 +996,7 @@
             </div>
 
             <div id="kyc-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">KYC Verification</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">KYC Verification</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">Pending Verifications</h3>
@@ -1015,7 +1025,7 @@
             </div>
 
             <div id="transactions-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">Transaction Management</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Transaction Management</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">All Transactions</h3>
@@ -1052,7 +1062,7 @@
             </div>
 
             <div id="admin-users-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">Admin User Management</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Admin User Management</h2>
                 
                 <div class="content-card" style="margin-bottom: 20px;">
                     <div class="card-header">
@@ -1110,7 +1120,7 @@
             </div>
 
             <div id="admin-activity-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">Admin Activity Log</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Admin Activity Log</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">Recent Admin Actions</h3>
@@ -1122,7 +1132,7 @@
             </div>
 
             <div id="user-analytics-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">User Analytics</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">User Analytics</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Active Users (30d)</div>
@@ -1144,7 +1154,7 @@
             </div>
 
             <div id="financial-overview-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">Financial Overview</h2>
+                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Financial Overview</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Total Contributions</div>
@@ -1949,6 +1959,135 @@
                 e.target.style.display = 'none';
             }
         };
+        
+        // Load Reports
+        async function loadReports() {
+            const tbody = document.getElementById('reports-tbody');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+
+            try {
+                const statusFilter = document.getElementById('report-status-filter').value;
+                const categoryFilter = document.getElementById('report-category-filter').value;
+
+                let q;
+                if (statusFilter === 'all' && categoryFilter === 'all') {
+                    q = query(collection(db, 'reports'), orderBy('submittedAt', 'desc'));
+                } else if (statusFilter !== 'all' && categoryFilter === 'all') {
+                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), orderBy('submittedAt', 'desc'));
+                } else if (statusFilter === 'all' && categoryFilter !== 'all') {
+                    q = query(collection(db, 'reports'), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
+                } else {
+                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
+                }
+
+                const snapshot = await getDocs(q);
+                tbody.innerHTML = '';
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #718096;">No reports found</td></tr>';
+                    return;
+                }
+
+                for (const docSnap of snapshot.docs) {
+                    const report = docSnap.data();
+                    const userDoc = await getDoc(doc(db, 'users', report.userId));
+                    const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User' };
+
+                    const priorityColors = {
+                        high: 'background: #fed7d7; color: #742a2a;',
+                        medium: 'background: #fef5e7; color: #744210;',
+                        low: 'background: #e6fffa; color: #234e52;'
+                    };
+
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${userData.firstName} ${userData.surname}</td>
+                        <td style="text-transform: capitalize;">${report.category.replace(/-/g, ' ')}</td>
+                        <td>${report.subject}</td>
+                        <td><span class="status-badge" style="${priorityColors[report.priority]}">${report.priority.toUpperCase()}</span></td>
+                        <td><span class="status-badge status-${report.status}">${report.status.replace('-', ' ').toUpperCase()}</span></td>
+                        <td>${formatDate(report.submittedAt)}</td>
+                        <td><button class="action-btn btn-view" onclick="window.reviewReport('${docSnap.id}')">Review</button></td>
+                    `;
+                }
+
+                // Update badge
+                const pendingReports = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
+                document.getElementById('reports-badge').textContent = pendingReports.size;
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+            }
+        }
+
+        // Review Report
+        window.reviewReport = async function(id) {
+            try {
+                const reportDoc = await getDoc(doc(db, 'reports', id));
+                const reportData = reportDoc.data();
+                const userDoc = await getDoc(doc(db, 'users', reportData.userId));
+                const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User', email: 'N/A' };
+
+                currentReportReview = { id, data: reportData };
+
+                document.getElementById('report-user-name').textContent = `${userData.firstName} ${userData.surname}`;
+                document.getElementById('report-user-email').textContent = userData.email;
+                document.getElementById('report-category').textContent = reportData.category.replace(/-/g, ' ').toUpperCase();
+                document.getElementById('report-priority').textContent = reportData.priority.toUpperCase();
+                document.getElementById('report-status').textContent = reportData.status.replace('-', ' ').toUpperCase();
+                document.getElementById('report-submitted').textContent = formatDate(reportData.submittedAt);
+                document.getElementById('report-subject').textContent = reportData.subject;
+                document.getElementById('report-description').textContent = reportData.description;
+                document.getElementById('report-new-status').value = reportData.status;
+
+                document.getElementById('report-modal').style.display = 'block';
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        };
+
+        // Respond to Report
+        window.respondToReport = async function() {
+            if (!currentReportReview) return;
+            
+            const response = document.getElementById('report-response').value;
+            const newStatus = document.getElementById('report-new-status').value;
+
+            if (!response.trim()) {
+                showAlert('Please provide a response', 'error');
+                return;
+            }
+
+            try {
+                // Update report in database
+                await updateDoc(doc(db, 'reports', currentReportReview.id), {
+                    status: newStatus,
+                    adminResponse: response,
+                    respondedBy: currentAdmin.uid,
+                    respondedAt: serverTimestamp()
+                });
+
+                // Send notification to user
+                const notificationRef = collection(db, 'notifications');
+                await setDoc(doc(notificationRef), {
+                    userId: currentReportReview.data.userId,
+                    title: 'Support Ticket Update',
+                    message: `Your support ticket "${currentReportReview.data.subject}" has been ${newStatus === 'resolved' ? 'resolved' : 'updated'}. Admin Response: ${response}`,
+                    type: 'report-response',
+                    read: false,
+                    timestamp: serverTimestamp(),
+                    reportId: currentReportReview.id
+                });
+
+                showAlert('Response sent successfully! User has been notified.', 'success');
+                closeModal('report-modal');
+                document.getElementById('report-response').value = '';
+                loadReports();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        };
+
+        
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
