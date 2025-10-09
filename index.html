@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SusuPay Admin Dashboard</title>
     <style>
-        * {
+          * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -119,9 +120,9 @@
         }
 
         .role-super {
-            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            background: linear-gradient(135deg, #1ba827 0%, #19547b 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 255, 42, 0.822);
         }
 
         .role-main {
@@ -309,7 +310,8 @@
         }
 
         .super-admin-header {
-            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            background:  linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+           
         }
 
         /* Main Content */
@@ -793,14 +795,14 @@
                 </button>
                 <div class="admin-brand">
                     <span>🛡️</span>
-                    <span>SusuPay Admin</span>
+                    <span style="color: white;">SusuPay Admin</span>
                     <span class="admin-role-badge" id="role-badge"></span>
                 </div>
             </div>
             <div class="header-user">
                 <span>
                     <div id="admin-name" style="font-weight: 600; color: #4a5568;"></div>
-                    <div id="admin-email" style="font-size: 0.8rem; color: #718096;"></div>
+                    <div id="admin-email-display" style="font-size: 0.8rem; color: #718096;"></div>
                 </span>
                 <div class="user-avatar" id="user-avatar">A</div>
                 <button class="logout-btn" id="logout-btn">Logout</button>
@@ -831,7 +833,7 @@
                 </div>
                 <div class="sidebar-nav-item" data-page="user-analytics">
                     <span class="nav-icon">📊</span>
-                    <span>User Analytics</span>
+                    <span style="color: white;">User Analytics</span>
                 </div>
                 <div class="sidebar-nav-item" data-page="financial-overview">
                     <span class="nav-icon">💎</span>
@@ -868,8 +870,8 @@
                     <span class="pending-badge" id="trans-badge">0</span>
                 </div>
             </div>
-            
-             <div class="sidebar-section" id="support-section">
+
+            <div class="sidebar-section" id="support-section">
                 <div class="sidebar-section-title">Support</div>
                 <div class="sidebar-nav-item" data-page="reports">
                     <span class="nav-icon">📋</span>
@@ -893,7 +895,7 @@
 
             <!-- Dashboard Page -->
             <div id="dashboard-content" class="page-content">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;;">Dashboard Overview</h2>
+                <h2 style="margin-bottom: 25px; color: white;">Dashboard Overview</h2>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
@@ -922,7 +924,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Recent Activity</h3>
                     </div>
-                    <div id="recent-activity">
+                    <div class="activity-timeline" id="recent-activity">
                         <p style="text-align: center; color: #718096; padding: 40px;">Loading...</p>
                     </div>
                 </div>
@@ -930,23 +932,16 @@
 
             <!-- Super Dashboard -->
             <div id="super-dashboard-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">
+                <h2 style="margin-bottom: 25px; color:white;">
                     👑 Super Admin Dashboard
                 </h2>
                 
                 <div class="stats-grid">
                     <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div class="stat-label" style="color: white;">Total Platform Users</div>
-                        <div class="stat-value" style="color: white;" id="super-users">0</div>
-                        <div class="stat-change" style="color: white;">Lifetime</div>
-                    </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
                         <div class="stat-label" style="color: white;">All-Time Revenue</div>
                         <div class="stat-value" style="color: white;" id="super-revenue">₵0</div>
                         <div class="stat-change" style="color: white;">Total Earnings</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div class="stat-label" style="color: white;">Active Admins</div
                     <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
                         <div class="stat-label" style="color: white;">Active Admins</div>
                         <div class="stat-value" style="color: white;" id="super-admins">0</div>
@@ -969,9 +964,9 @@
                 </div>
             </div>
 
-            <!-- Other pages will be added here -->
+            <!-- Users Page -->
             <div id="users-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">User Management</h2>
+                <h2 style="margin-bottom: 25px; color: white;">User Management</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">All Users</h3>
@@ -995,8 +990,9 @@
                 </div>
             </div>
 
+            <!-- KYC Page -->
             <div id="kyc-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">KYC Verification</h2>
+                <h2 style="margin-bottom: 25px; color: white;">KYC Verification</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">Pending Verifications</h3>
@@ -1024,8 +1020,9 @@
                 </div>
             </div>
 
+            <!-- Transactions Page -->
             <div id="transactions-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Transaction Management</h2>
+                <h2 style="margin-bottom: 25px; color: white;">Transaction Management</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">All Transactions</h3>
@@ -1061,8 +1058,53 @@
                 </div>
             </div>
 
+            <!-- Reports Page -->
+            <div id="reports-content" class="page-content hidden">
+                <h2 style="margin-bottom: 25px; color: white;">User Reports</h2>
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Support Tickets</h3>
+                        <div class="filter-group">
+                            <select class="filter-select" id="report-status-filter">
+                                <option value="pending">Pending</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="all">All</option>
+                            </select>
+                            <select class="filter-select" id="report-category-filter">
+                                <option value="all">All Categories</option>
+                                <option value="contribution-issues">Contribution Issues</option>
+                                <option value="withdrawal-problems">Withdrawal Problems</option>
+                                <option value="kyc-verification">KYC Verification</option>
+                                <option value="payment-method-issues">Payment Method Issues</option>
+                                <option value="account-access">Account Access</option>
+                                <option value="security-concerns">Security Concerns</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Subject</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-tbody">
+                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Admin Users Page -->
             <div id="admin-users-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Admin User Management</h2>
+                <h2 style="margin-bottom: 25px; color: white;">Admin User Management</h2>
                 
                 <div class="content-card" style="margin-bottom: 20px;">
                     <div class="card-header">
@@ -1119,8 +1161,9 @@
                 </div>
             </div>
 
+            <!-- Admin Activity Page -->
             <div id="admin-activity-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Admin Activity Log</h2>
+                <h2 style="margin-bottom: 25px; color: white;">Admin Activity Log</h2>
                 <div class="content-card">
                     <div class="card-header">
                         <h3 class="card-title">Recent Admin Actions</h3>
@@ -1131,8 +1174,9 @@
                 </div>
             </div>
 
+            <!-- User Analytics Page -->
             <div id="user-analytics-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">User Analytics</h2>
+                <h2 style="margin-bottom: 25px; color: #4a5568;">User Analytics</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Active Users (30d)</div>
@@ -1153,8 +1197,9 @@
                 </div>
             </div>
 
+            <!-- Financial Overview Page -->
             <div id="financial-overview-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #f1f1f1;">Financial Overview</h2>
+                <h2 style="margin-bottom: 25px; color: white;">Financial Overview</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Total Contributions</div>
@@ -1274,7 +1319,72 @@
             </div>
         </div>
     </div>
-      <script type="module">
+
+    <!-- Report Review Modal -->
+    <div class="modal" id="report-modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('report-modal')">&times;</button>
+            <h2 class="modal-title">Support Ticket Details</h2>
+            
+            <div class="user-details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">User</div>
+                    <div class="detail-value" id="report-user-name"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value" id="report-user-email"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value" id="report-category"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Priority</div>
+                    <div class="detail-value" id="report-priority"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value" id="report-status"></div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Submitted</div>
+                    <div class="detail-value" id="report-submitted"></div>
+                </div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <h3 style="margin-bottom: 10px; color: white;">Subject</h3>
+                <div style="padding: 15px; background: #f7fafc; border-radius: 8px;" id="report-subject"></div>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <h3 style="margin-bottom: 10px; color: #4a5568;">Description</h3>
+                <div style="padding: 15px; background: #f7fafc; border-radius: 8px; white-space: pre-wrap;" id="report-description"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Admin Response</label>
+                <textarea id="report-response" rows="4" placeholder="Write your response to the user..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Update Status</label>
+                <select id="report-new-status">
+                    <option value="in-progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: flex-end;">
+                <button class="action-btn btn-view" onclick="closeModal('report-modal')">Cancel</button>
+                <button class="action-btn btn-approve" onclick="respondToReport()">Send Response</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, getDocs, updateDoc, setDoc, deleteDoc, collection, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
@@ -1296,15 +1406,16 @@
         let adminRole = null;
         let currentKycReview = null;
         let currentTransReview = null;
+        let currentReportReview = null;
 
         const rolePermissions = {
-            super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview'],
-            main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users'],
-            senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users'],
-            financial: ['dashboard', 'transactions', 'users'],
-            support: ['dashboard', 'users'],
-            security: ['dashboard', 'users', 'kyc'],
-            operations: ['dashboard', 'users', 'transactions', 'kyc']
+            super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports'],
+            main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports'],
+            senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports'],
+            financial: ['dashboard', 'transactions', 'users', 'reports'],
+            support: ['dashboard', 'users', 'reports'],
+            security: ['dashboard', 'users', 'kyc', 'reports'],
+            operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports']
         };
 
         // Utility functions
@@ -1386,7 +1497,7 @@
             const adminData = adminDoc.data();
 
             document.getElementById('admin-name').textContent = adminData.name;
-            document.getElementById('admin-email').textContent = adminData.email;
+            document.getElementById('admin-email-display').textContent = adminData.email;
             document.getElementById('user-avatar').textContent = adminData.name.charAt(0);
             document.getElementById('role-badge').textContent = adminRole.charAt(0).toUpperCase() + adminRole.slice(1) + ' Admin';
             document.getElementById('role-badge').className = `admin-role-badge role-${adminRole}`;
@@ -1405,11 +1516,11 @@
         function configureSidebar() {
             const permissions = rolePermissions[adminRole];
             
-            // Show/hide sections
             document.getElementById('super-section').style.display = adminRole === 'super' ? 'block' : 'none';
             document.getElementById('kyc-section').style.display = permissions.includes('kyc') ? 'block' : 'none';
             document.getElementById('financial-section').style.display = permissions.includes('transactions') ? 'block' : 'none';
             document.getElementById('admin-section').style.display = permissions.includes('admin-users') ? 'block' : 'none';
+            document.getElementById('support-section').style.display = permissions.includes('reports') ? 'block' : 'none';
         }
 
         // Navigation
@@ -1440,6 +1551,7 @@
             else if (page === 'admin-activity') await loadAdminActivity();
             else if (page === 'user-analytics') await loadUserAnalytics();
             else if (page === 'financial-overview') await loadFinancialOverview();
+            else if (page === 'reports') await loadReports();
         }
 
         // Load Dashboard Stats
@@ -1448,6 +1560,7 @@
                 const users = await getDocs(collection(db, 'users'));
                 const trans = await getDocs(collection(db, 'transactions'));
                 const kycPending = await getDocs(query(collection(db, 'kyc_submissions'), where('status', '==', 'under_review')));
+                const reportsPending = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
                 
                 let revenue = 0;
                 trans.forEach(doc => {
@@ -1460,11 +1573,65 @@
                 document.getElementById('stat-kyc').textContent = kycPending.size;
                 document.getElementById('stat-revenue').textContent = formatCurrency(revenue);
                 document.getElementById('kyc-badge').textContent = kycPending.size;
+                document.getElementById('reports-badge').textContent = reportsPending.size;
                 
                 const transPending = await getDocs(query(collection(db, 'transactions'), where('status', '==', 'pending')));
                 document.getElementById('trans-badge').textContent = transPending.size;
+
+                await loadRecentActivity();
             } catch (error) {
                 console.error(error);
+            }
+        }
+
+        // Load Recent Activity
+        async function loadRecentActivity() {
+            const container = document.getElementById('recent-activity');
+            container.innerHTML = '';
+
+            try {
+        // Load Recent Activity
+        async function loadRecentActivity() {
+            const container = document.getElementById('recent-activity');
+            container.innerHTML = '';
+
+            try {
+                const q = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'), limit(10));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #718096; padding: 40px;">No recent activity</p>';
+                    return;
+                }
+
+                for (const docSnap of snapshot.docs) {
+                    const trans = docSnap.data();
+                    const userDoc = await getDoc(doc(db, 'users', trans.userId));
+                    
+                    if (!userDoc.exists()) continue;
+                    
+                    const userData = userDoc.data();
+
+                    const item = document.createElement('div');
+                    item.className = 'activity-item';
+                    item.innerHTML = `
+                        <div class="activity-time">${formatDate(trans.timestamp)}</div>
+                        <div class="activity-description">
+                            <span class="activity-user">${userData.firstName} ${userData.surname}</span>
+                            ${trans.type === 'contribution' ? 'contributed' : 'withdrew'} ${formatCurrency(trans.amount)}
+                            <span class="status-badge status-${trans.status}" style="margin-left: 10px; font-size: 0.75rem;">${trans.status.toUpperCase()}</span>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                }
+            } catch (error) {
+                console.error('Activity error:', error);
+                container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
+            }
+        }
+        } catch (error) {
+                console.error('Activity error:', error);
+                container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
             }
         }
 
@@ -1788,6 +1955,128 @@
             }
         };
 
+        // Load Reports
+        async function loadReports() {
+            const tbody = document.getElementById('reports-tbody');
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+
+            try {
+                const statusFilter = document.getElementById('report-status-filter').value;
+                const categoryFilter = document.getElementById('report-category-filter').value;
+
+                let q;
+                if (statusFilter === 'all' && categoryFilter === 'all') {
+                    q = query(collection(db, 'reports'), orderBy('submittedAt', 'desc'));
+                } else if (statusFilter !== 'all' && categoryFilter === 'all') {
+                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), orderBy('submittedAt', 'desc'));
+                } else if (statusFilter === 'all' && categoryFilter !== 'all') {
+                    q = query(collection(db, 'reports'), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
+                } else {
+                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
+                }
+
+                const snapshot = await getDocs(q);
+                tbody.innerHTML = '';
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #718096;">No reports found</td></tr>';
+                    return;
+                }
+
+                for (const docSnap of snapshot.docs) {
+                    const report = docSnap.data();
+                    const userDoc = await getDoc(doc(db, 'users', report.userId));
+                    const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User' };
+
+                    const priorityColors = {
+                        high: 'background: #fed7d7; color: #742a2a;',
+                        medium: 'background: #fef5e7; color: #744210;',
+                        low: 'background: #e6fffa; color: #234e52;'
+                    };
+
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${userData.firstName} ${userData.surname}</td>
+                        <td style="text-transform: capitalize;">${report.category.replace(/-/g, ' ')}</td>
+                        <td>${report.subject}</td>
+                        <td><span class="status-badge" style="${priorityColors[report.priority]}">${report.priority.toUpperCase()}</span></td>
+                        <td><span class="status-badge status-${report.status}">${report.status.replace('-', ' ').toUpperCase()}</span></td>
+                        <td>${formatDate(report.submittedAt)}</td>
+                        <td><button class="action-btn btn-view" onclick="window.reviewReport('${docSnap.id}')">Review</button></td>
+                    `;
+                }
+
+                const pendingReports = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
+                document.getElementById('reports-badge').textContent = pendingReports.size;
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+            }
+        }
+
+        window.reviewReport = async function(id) {
+            try {
+                const reportDoc = await getDoc(doc(db, 'reports', id));
+                const reportData = reportDoc.data();
+                const userDoc = await getDoc(doc(db, 'users', reportData.userId));
+                const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User', email: 'N/A' };
+
+                currentReportReview = { id, data: reportData };
+
+                document.getElementById('report-user-name').textContent = `${userData.firstName} ${userData.surname}`;
+                document.getElementById('report-user-email').textContent = userData.email;
+                document.getElementById('report-category').textContent = reportData.category.replace(/-/g, ' ').toUpperCase();
+                document.getElementById('report-priority').textContent = reportData.priority.toUpperCase();
+                document.getElementById('report-status').textContent = reportData.status.replace('-', ' ').toUpperCase();
+                document.getElementById('report-submitted').textContent = formatDate(reportData.submittedAt);
+                document.getElementById('report-subject').textContent = reportData.subject;
+                document.getElementById('report-description').textContent = reportData.description;
+                document.getElementById('report-new-status').value = reportData.status;
+
+                document.getElementById('report-modal').style.display = 'block';
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        };
+
+        window.respondToReport = async function() {
+            if (!currentReportReview) return;
+            
+            const response = document.getElementById('report-response').value;
+            const newStatus = document.getElementById('report-new-status').value;
+
+            if (!response.trim()) {
+                showAlert('Please provide a response', 'error');
+                return;
+            }
+
+            try {
+                await updateDoc(doc(db, 'reports', currentReportReview.id), {
+                    status: newStatus,
+                    adminResponse: response,
+                    respondedBy: currentAdmin.uid,
+                    respondedAt: serverTimestamp()
+                });
+
+                const notificationRef = doc(collection(db, 'notifications'));
+                await setDoc(notificationRef, {
+                    userId: currentReportReview.data.userId,
+                    title: 'Support Ticket Update',
+                    message: `Your support ticket "${currentReportReview.data.subject}" has been ${newStatus === 'resolved' ? 'resolved' : 'updated'}. Admin Response: ${response}`,
+                    type: 'report-response',
+                    read: false,
+                    timestamp: serverTimestamp(),
+                    reportId: currentReportReview.id
+                });
+
+                showAlert('Response sent successfully! User has been notified.', 'success');
+                closeModal('report-modal');
+                document.getElementById('report-response').value = '';
+                loadReports();
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+            }
+        };
+
         // Load Admin Users
         async function loadAdminUsers() {
             const tbody = document.getElementById('admins-tbody');
@@ -1817,7 +2106,6 @@
             }
         }
 
-        // Add Admin
         document.getElementById('add-admin-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -1854,7 +2142,6 @@
             }
         };
 
-        // Load other analytics pages
         async function loadAdminActivity() {
             const container = document.getElementById('admin-activity-list');
             container.innerHTML = '<p style="text-align: center; padding: 40px;">Loading...</p>';
@@ -1937,6 +2224,8 @@
         document.getElementById('kyc-filter').addEventListener('change', loadKYC);
         document.getElementById('trans-filter').addEventListener('change', loadTransactions);
         document.getElementById('trans-type-filter').addEventListener('change', loadTransactions);
+        document.getElementById('report-status-filter').addEventListener('change', loadReports);
+        document.getElementById('report-category-filter').addEventListener('change', loadReports);
 
         // Mobile menu
         document.getElementById('hamburger-btn').addEventListener('click', () => {
@@ -1959,135 +2248,6 @@
                 e.target.style.display = 'none';
             }
         };
-        
-        // Load Reports
-        async function loadReports() {
-            const tbody = document.getElementById('reports-tbody');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
-
-            try {
-                const statusFilter = document.getElementById('report-status-filter').value;
-                const categoryFilter = document.getElementById('report-category-filter').value;
-
-                let q;
-                if (statusFilter === 'all' && categoryFilter === 'all') {
-                    q = query(collection(db, 'reports'), orderBy('submittedAt', 'desc'));
-                } else if (statusFilter !== 'all' && categoryFilter === 'all') {
-                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), orderBy('submittedAt', 'desc'));
-                } else if (statusFilter === 'all' && categoryFilter !== 'all') {
-                    q = query(collection(db, 'reports'), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
-                } else {
-                    q = query(collection(db, 'reports'), where('status', '==', statusFilter), where('category', '==', categoryFilter), orderBy('submittedAt', 'desc'));
-                }
-
-                const snapshot = await getDocs(q);
-                tbody.innerHTML = '';
-
-                if (snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #718096;">No reports found</td></tr>';
-                    return;
-                }
-
-                for (const docSnap of snapshot.docs) {
-                    const report = docSnap.data();
-                    const userDoc = await getDoc(doc(db, 'users', report.userId));
-                    const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User' };
-
-                    const priorityColors = {
-                        high: 'background: #fed7d7; color: #742a2a;',
-                        medium: 'background: #fef5e7; color: #744210;',
-                        low: 'background: #e6fffa; color: #234e52;'
-                    };
-
-                    const row = tbody.insertRow();
-                    row.innerHTML = `
-                        <td>${userData.firstName} ${userData.surname}</td>
-                        <td style="text-transform: capitalize;">${report.category.replace(/-/g, ' ')}</td>
-                        <td>${report.subject}</td>
-                        <td><span class="status-badge" style="${priorityColors[report.priority]}">${report.priority.toUpperCase()}</span></td>
-                        <td><span class="status-badge status-${report.status}">${report.status.replace('-', ' ').toUpperCase()}</span></td>
-                        <td>${formatDate(report.submittedAt)}</td>
-                        <td><button class="action-btn btn-view" onclick="window.reviewReport('${docSnap.id}')">Review</button></td>
-                    `;
-                }
-
-                // Update badge
-                const pendingReports = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
-                document.getElementById('reports-badge').textContent = pendingReports.size;
-            } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
-            }
-        }
-
-        // Review Report
-        window.reviewReport = async function(id) {
-            try {
-                const reportDoc = await getDoc(doc(db, 'reports', id));
-                const reportData = reportDoc.data();
-                const userDoc = await getDoc(doc(db, 'users', reportData.userId));
-                const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User', email: 'N/A' };
-
-                currentReportReview = { id, data: reportData };
-
-                document.getElementById('report-user-name').textContent = `${userData.firstName} ${userData.surname}`;
-                document.getElementById('report-user-email').textContent = userData.email;
-                document.getElementById('report-category').textContent = reportData.category.replace(/-/g, ' ').toUpperCase();
-                document.getElementById('report-priority').textContent = reportData.priority.toUpperCase();
-                document.getElementById('report-status').textContent = reportData.status.replace('-', ' ').toUpperCase();
-                document.getElementById('report-submitted').textContent = formatDate(reportData.submittedAt);
-                document.getElementById('report-subject').textContent = reportData.subject;
-                document.getElementById('report-description').textContent = reportData.description;
-                document.getElementById('report-new-status').value = reportData.status;
-
-                document.getElementById('report-modal').style.display = 'block';
-            } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
-            }
-        };
-
-        // Respond to Report
-        window.respondToReport = async function() {
-            if (!currentReportReview) return;
-            
-            const response = document.getElementById('report-response').value;
-            const newStatus = document.getElementById('report-new-status').value;
-
-            if (!response.trim()) {
-                showAlert('Please provide a response', 'error');
-                return;
-            }
-
-            try {
-                // Update report in database
-                await updateDoc(doc(db, 'reports', currentReportReview.id), {
-                    status: newStatus,
-                    adminResponse: response,
-                    respondedBy: currentAdmin.uid,
-                    respondedAt: serverTimestamp()
-                });
-
-                // Send notification to user
-                const notificationRef = collection(db, 'notifications');
-                await setDoc(doc(notificationRef), {
-                    userId: currentReportReview.data.userId,
-                    title: 'Support Ticket Update',
-                    message: `Your support ticket "${currentReportReview.data.subject}" has been ${newStatus === 'resolved' ? 'resolved' : 'updated'}. Admin Response: ${response}`,
-                    type: 'report-response',
-                    read: false,
-                    timestamp: serverTimestamp(),
-                    reportId: currentReportReview.id
-                });
-
-                showAlert('Response sent successfully! User has been notified.', 'success');
-                closeModal('report-modal');
-                document.getElementById('report-response').value = '';
-                loadReports();
-            } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
-            }
-        };
-
-        
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -2096,3 +2256,4 @@
         });
     </script>
 </body>
+</html>
