@@ -1584,12 +1584,9 @@
             }
         }
 
-        // Load Recent Activity
-        async function loadRecentActivity() {
-            const container = document.getElementById('recent-activity');
-            container.innerHTML = '';
+       
 
-            try {
+           
         // Load Recent Activity
         async function loadRecentActivity() {
             const container = document.getElementById('recent-activity');
@@ -1629,11 +1626,7 @@
                 container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
             }
         }
-        } catch (error) {
-                console.error('Activity error:', error);
-                container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
-            }
-        }
+       
 
         // Load Super Dashboard
         async function loadSuperDashboard() {
