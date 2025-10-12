@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SusuPay Admin Dashboard</title>
     <style>
-          * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -94,7 +94,7 @@
         }
 
         .hamburger-btn:hover {
-            background: #f7fafc;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .hamburger-btn svg {
@@ -122,7 +122,7 @@
         .role-super {
             background: linear-gradient(135deg, #1ba827 0%, #19547b 100%);
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 255, 42, 0.822);
+            box-shadow: 0 4px 15px rgba(0, 255, 42, 0.767);
         }
 
         .role-main {
@@ -161,6 +161,12 @@
             gap: 15px;
         }
 
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
         .user-avatar {
             width: 45px;
             height: 45px;
@@ -188,6 +194,7 @@
 
         .logout-btn:hover {
             background: #c53030;
+            transform: translateY(-2px);
         }
 
         /* Sidebar */
@@ -198,7 +205,6 @@
             bottom: 0;
             width: 280px;
             background: linear-gradient(135deg, #1c1949 0%, #3c0ea7 100%);
-            min-height: 70vh;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             z-index: 900;
@@ -208,7 +214,7 @@
         .sidebar-header {
             display: none;
             padding: 20px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             align-items: center;
             justify-content: space-between;
         }
@@ -223,18 +229,18 @@
         }
 
         .close-sidebar-btn:hover {
-            background: #f7fafc;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .close-sidebar-btn svg {
             width: 24px;
             height: 24px;
-            stroke: #4a5568;
+            stroke: #ffffff;
         }
 
         .sidebar-section {
             padding: 20px 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .sidebar-section-title {
@@ -252,22 +258,22 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            color: #4a5568;
+            color: #e2e8f0;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
             font-weight: 500;
         }
 
         .sidebar-nav-item:hover {
-            background: #f7fafc;
+            background: rgba(255, 255, 255, 0.1);
             border-left-color: #667eea;
-            color: #667eea;
+            color: #ffffff;
         }
 
         .sidebar-nav-item.active {
-            background: #ebf8ff;
+            background: rgba(102, 126, 234, 0.2);
             border-left-color: #667eea;
-            color: #667eea;
+            color: #ffffff;
         }
 
         .nav-icon {
@@ -282,6 +288,8 @@
             border-radius: 12px;
             font-size: 0.75rem;
             font-weight: 600;
+            min-width: 20px;
+            text-align: center;
         }
 
         /* Super Admin Theme */
@@ -310,8 +318,7 @@
         }
 
         .super-admin-header {
-            background:  linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
-           
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
         }
 
         /* Main Content */
@@ -336,17 +343,19 @@
             padding: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border-left: 4px solid #667eea;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .stat-label {
             color: #718096;
             font-size: 0.9rem;
             margin-bottom: 10px;
+            font-weight: 500;
         }
 
         .stat-value {
@@ -381,6 +390,8 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f7fafc;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .card-title {
@@ -401,6 +412,13 @@
             border-radius: 8px;
             font-size: 0.9rem;
             color: #4a5568;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #667eea;
         }
 
         /* Tables */
@@ -419,11 +437,13 @@
             font-weight: 600;
             color: #4a5568;
             font-size: 0.9rem;
+            border-bottom: 2px solid #e2e8f0;
         }
 
         .data-table td {
             padding: 15px;
             border-bottom: 1px solid #f7fafc;
+            color: #4a5568;
         }
 
         .data-table tr:hover {
@@ -458,6 +478,16 @@
             color: #2a4365;
         }
 
+        .status-in-progress {
+            background: #e9d8fd;
+            color: #44337a;
+        }
+
+        .status-resolved {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
         .action-btn {
             padding: 6px 12px;
             border: none;
@@ -467,6 +497,11 @@
             font-weight: 600;
             transition: all 0.3s ease;
             margin-right: 5px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .btn-view {
@@ -511,6 +546,7 @@
             border-radius: 8px;
             font-size: 1rem;
             color: #4a5568;
+            transition: border-color 0.3s ease;
         }
 
         .form-group input:focus,
@@ -538,6 +574,12 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -548,6 +590,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
+            overflow-y: auto;
         }
 
         .modal-content {
@@ -573,6 +616,11 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: #718096;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #4a5568;
         }
 
         .modal-title {
@@ -593,6 +641,12 @@
             width: 100%;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .document-preview img:hover {
+            transform: scale(1.05);
         }
 
         .user-details-grid {
@@ -612,12 +666,14 @@
             font-size: 0.85rem;
             color: #718096;
             margin-bottom: 5px;
+            font-weight: 500;
         }
 
         .detail-value {
             font-size: 1rem;
             font-weight: 600;
             color: #4a5568;
+            word-break: break-word;
         }
 
         .alert {
@@ -643,7 +699,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         /* Activity Timeline */
@@ -699,6 +755,26 @@
             font-weight: 600;
         }
 
+        /* Loading State */
+        .loading {
+            text-align: center;
+            color: #718096;
+            padding: 40px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            color: #718096;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hamburger-btn {
@@ -729,13 +805,59 @@
                 grid-template-columns: 1fr;
             }
 
-            .header-user span {
+            .user-info {
                 display: none;
             }
 
             .login-container {
                 padding: 30px 20px;
             }
+
+            .modal-content {
+                width: 95%;
+                padding: 30px 20px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-select, .search-input {
+                width: 100%;
+            }
+
+            .data-table {
+                font-size: 0.85rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
         }
     </style>
 </head>
@@ -771,7 +893,7 @@
 
                 <div class="form-group">
                     <label for="admin-password">Password</label>
-                    <input type="password" id="admin-password" required>
+                    <input type="password" id="admin-password" required placeholder="Enter your password">
                 </div>
 
                 <button type="submit" class="btn" style="width: 100%;">
@@ -800,11 +922,11 @@
                 </div>
             </div>
             <div class="header-user">
-                <span>
+                <div class="user-info">
                     <div id="admin-name" style="font-weight: 600; color: #ffffff;"></div>
                     <div id="admin-email-display" style="font-size: 0.8rem; color: #05f711;"></div>
-                </span>
-                <div class="user-avatar" id="user-avatar">A</div>
+                </div>
+               <div id="user-avatar" style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;">A</div>
                 <button class="logout-btn" id="logout-btn">Logout</button>
             </div>
         </header>
@@ -812,7 +934,7 @@
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="admin-sidebar">
             <div class="sidebar-header">
-                <span style="font-weight: 600; color: #4a5568;">Menu</span>
+                <span style="font-weight: 600; color: #ffffff;">Menu</span>
                 <button class="close-sidebar-btn" id="close-sidebar-btn">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -833,7 +955,7 @@
                 </div>
                 <div class="sidebar-nav-item" data-page="user-analytics">
                     <span class="nav-icon">📊</span>
-                    <span style="color: white;">User Analytics</span>
+                    <span>User Analytics</span>
                 </div>
                 <div class="sidebar-nav-item" data-page="financial-overview">
                     <span class="nav-icon">💎</span>
@@ -880,11 +1002,27 @@
                 </div>
             </div>
 
+            <div class="sidebar-section" id="security-section">
+                <div class="sidebar-section-title">Security</div>
+                <div class="sidebar-nav-item" data-page="security-logs">
+                    <span class="nav-icon">🔒</span>
+                    <span>Security Logs</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="suspicious">
+                    <span class="nav-icon">⚠️</span>
+                    <span>Suspicious Activity</span>
+                </div>
+            </div>
+
             <div class="sidebar-section" id="admin-section">
                 <div class="sidebar-section-title">Administration</div>
                 <div class="sidebar-nav-item" data-page="admin-users">
                     <span class="nav-icon">👨‍💼</span>
                     <span>Admin Users</span>
+                </div>
+                <div class="sidebar-nav-item" data-page="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>System Settings</span>
                 </div>
             </div>
         </aside>
@@ -925,32 +1063,35 @@
                         <h3 class="card-title">Recent Activity</h3>
                     </div>
                     <div class="activity-timeline" id="recent-activity">
-                        <p style="text-align: center; color: #718096; padding: 40px;">Loading...</p>
+                        <p class="loading">Loading activity...</p>
                     </div>
                 </div>
             </div>
 
             <!-- Super Dashboard -->
             <div id="super-dashboard-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color:white;">
-                    👑 Super Admin Dashboard
-                </h2>
+                <h2 style="margin-bottom: 25px; color: white;">👑 Super Admin Dashboard</h2>
                 
                 <div class="stats-grid">
                     <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div class="stat-label" style="color: white;">All-Time Revenue</div>
+                        <div class="stat-label" style="color: rgba(255,255,255,0.9);">Total Users</div>
+                        <div class="stat-value" style="color: white;" id="super-users">0</div>
+                        <div class="stat-change" style="color: rgba(255,255,255,0.8);">Registered</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none;">
+                        <div class="stat-label" style="color: rgba(255,255,255,0.9);">All-Time Revenue</div>
                         <div class="stat-value" style="color: white;" id="super-revenue">₵0</div>
-                        <div class="stat-change" style="color: white;">Total Earnings</div>
+                        <div class="stat-change" style="color: rgba(255,255,255,0.8);">Total Earnings</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div class="stat-label" style="color: white;">Active Admins</div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none;">
+                        <div class="stat-label" style="color: rgba(255,255,255,0.9);">Active Admins</div>
                         <div class="stat-value" style="color: white;" id="super-admins">0</div>
-                        <div class="stat-change" style="color: white;">Personnel</div>
+                        <div class="stat-change" style="color: rgba(255,255,255,0.8);">Personnel</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div class="stat-label" style="color: white;">System Health</div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; border: none;">
+                        <div class="stat-label" style="color: rgba(255,255,255,0.9);">System Health</div>
                         <div class="stat-value" style="color: white;">98%</div>
-                        <div class="stat-change" style="color: white;">Operational</div>
+                        <div class="stat-change" style="color: rgba(255,255,255,0.8);">Operational</div>
                     </div>
                 </div>
 
@@ -959,7 +1100,7 @@
                         <h3 class="card-title">Real-Time Activity</h3>
                     </div>
                     <div class="activity-timeline" id="super-activity">
-                        <p style="text-align: center; color: #718096; padding: 40px;">Loading...</p>
+                        <p class="loading">Loading activity...</p>
                     </div>
                 </div>
             </div>
@@ -972,21 +1113,23 @@
                         <h3 class="card-title">All Users</h3>
                         <input type="text" class="search-input" id="user-search" placeholder="Search users...">
                     </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Balance</th>
-                                <th>KYC Status</th>
-                                <th>Joined</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-tbody">
-                            <tr><td colspan="6" style="text-align: center; padding: 40px;">Loading...</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Balance</th>
+                                    <th>KYC Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody">
+                                <tr><td colspan="6" class="loading">Loading users...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1003,20 +1146,22 @@
                             <option value="rejected">Rejected</option>
                         </select>
                     </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>ID Type</th>
-                                <th>Submitted</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="kyc-tbody">
-                            <tr><td colspan="5" style="text-align: center; padding: 40px;">Loading...</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>ID Type</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kyc-tbody">
+                                <tr><td colspan="5" class="loading">Loading KYC submissions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1031,6 +1176,7 @@
                                 <option value="pending">Pending</option>
                                 <option value="all">All</option>
                                 <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
                             </select>
                             <select class="filter-select" id="trans-type-filter">
                                 <option value="all">All Types</option>
@@ -1039,22 +1185,24 @@
                             </select>
                         </div>
                     </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Type</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="trans-tbody">
-                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading...</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trans-tbody">
+                                <tr><td colspan="7" class="loading">Loading transactions...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1083,22 +1231,24 @@
                             </select>
                         </div>
                     </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Category</th>
-                                <th>Subject</th>
-                                <th>Priority</th>
-                                <th>Status</th>
-                                <th>Submitted</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reports-tbody">
-                            <tr><td colspan="7" style="text-align: center; padding: 40px;">Loading...</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Category</th>
+                                    <th>Subject</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-tbody">
+                                <tr><td colspan="7" class="loading">Loading reports...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1114,11 +1264,11 @@
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" id="new-admin-name" required>
+                                <input type="text" id="new-admin-name" required placeholder="Full name">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email" id="new-admin-email" required>
+                                <input type="email" id="new-admin-email" required placeholder="admin@susupay.com">
                             </div>
                             <div class="form-group">
                                 <label>Role</label>
@@ -1133,7 +1283,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Password</label>
-                                <input type="password" id="new-admin-pass" required minlength="8">
+                                <input type="password" id="new-admin-pass" required minlength="8" placeholder="Min. 8 characters">
                             </div>
                         </div>
                         <button type="submit" class="btn">Add Admin</button>
@@ -1144,20 +1294,22 @@
                     <div class="card-header">
                         <h3 class="card-title">Current Admins</h3>
                     </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Added</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admins-tbody">
-                            <tr><td colspan="5" style="text-align: center; padding: 40px;">Loading...</td></tr>
-                        </tbody>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admins-tbody">
+                                <tr><td colspan="5" class="loading">Loading admins...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1169,14 +1321,14 @@
                         <h3 class="card-title">Recent Admin Actions</h3>
                     </div>
                     <div id="admin-activity-list">
-                        <p style="text-align: center; color: #718096; padding: 40px;">Loading...</p>
+                        <p class="loading">Loading admin activity...</p>
                     </div>
                 </div>
             </div>
 
             <!-- User Analytics Page -->
             <div id="user-analytics-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: #4a5568;">User Analytics</h2>
+                <h2 style="margin-bottom: 25px; color: white;">User Analytics</h2>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label">Active Users (30d)</div>
@@ -1193,6 +1345,16 @@
                     <div class="stat-card">
                         <div class="stat-label">Average Balance</div>
                         <div class="stat-value" id="avg-balance">₵0</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">User Growth Chart</h3>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📈</div>
+                        <p>Analytics visualization coming soon</p>
                     </div>
                 </div>
             </div>
@@ -1216,6 +1378,66 @@
                     <div class="stat-card">
                         <div class="stat-label">Pending Value</div>
                         <div class="stat-value" id="pending-value">₵0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Investments</div>
+                        <div class="stat-value" id="pending-value">₵0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Return On Investments (ROI)</div>
+                        <div class="stat-value" id="pending-value">₵0</div>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Financial Trends</h3>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💰</div>
+                        <p>Financial charts coming soon</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Logs Page -->
+            <div id="security-logs-content" class="page-content hidden">
+                <h2 style="margin-bottom: 25px; color: white;">Security Logs</h2>
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">System Security Events</h3>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔒</div>
+                        <p>Security monitoring coming soon</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Suspicious Activity Page -->
+            <div id="suspicious-content" class="page-content hidden">
+                <h2 style="margin-bottom: 25px; color: white;">Suspicious Activity</h2>
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Flagged Activities</h3>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <p>No suspicious activity detected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settings-content" class="page-content hidden">
+                <h2 style="margin-bottom: 25px; color: white;">System Settings</h2>
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Application Configuration</h3>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚙️</div>
+                        <p>System settings interface coming soon</p>
                     </div>
                 </div>
             </div>
@@ -1247,28 +1469,28 @@
                 </div>
             </div>
 
-            <h3 style="margin: 20px 0;">Documents</h3>
+            <h3 style="margin: 20px 0; color: #4a5568;">Documents</h3>
             <div class="document-preview">
                 <div>
-                    <p style="font-weight: 600; margin-bottom: 10px;">Front ID</p>
-                    <img id="kyc-front" src="" alt="Front ID">
+                    <p style="font-weight: 600; margin-bottom: 10px; color: #4a5568;">Front ID</p>
+                    <img id="kyc-front" src="" alt="Front ID" onclick="window.open(this.src, '_blank')">
                 </div>
                 <div>
-                    <p style="font-weight: 600; margin-bottom: 10px;">Back ID</p>
-                    <img id="kyc-back" src="" alt="Back ID">
+                    <p style="font-weight: 600; margin-bottom: 10px; color: #4a5568;">Back ID</p>
+                    <img id="kyc-back" src="" alt="Back ID" onclick="window.open(this.src, '_blank')">
                 </div>
                 <div>
-                    <p style="font-weight: 600; margin-bottom: 10px;">Selfie</p>
-                    <img id="kyc-selfie" src="" alt="Selfie">
+                    <p style="font-weight: 600; margin-bottom: 10px; color: #4a5568;">Selfie</p>
+                    <img id="kyc-selfie" src="" alt="Selfie" onclick="window.open(this.src, '_blank')">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Review Notes</label>
-                <textarea id="kyc-notes" rows="3"></textarea>
+                <textarea id="kyc-notes" rows="3" placeholder="Add notes about your decision..."></textarea>
             </div>
 
-            <div style="display: flex; gap: 15px; justify-content: flex-end;">
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
                 <button class="action-btn btn-reject" onclick="rejectKYC()">Reject</button>
                 <button class="action-btn btn-approve" onclick="approveKYC()">Approve</button>
             </div>
@@ -1310,10 +1532,10 @@
 
             <div class="form-group">
                 <label>Review Notes</label>
-                <textarea id="trans-notes" rows="3"></textarea>
+                <textarea id="trans-notes" rows="3" placeholder="Add notes about your decision..."></textarea>
             </div>
 
-            <div style="display: flex; gap: 15px; justify-content: flex-end;">
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
                 <button class="action-btn btn-reject" onclick="rejectTransaction()">Reject</button>
                 <button class="action-btn btn-approve" onclick="approveTransaction()">Approve</button>
             </div>
@@ -1354,13 +1576,13 @@
             </div>
 
             <div style="margin: 20px 0;">
-                <h3 style="margin-bottom: 10px; color: white;">Subject</h3>
-                <div style="padding: 15px; background: #f7fafc; border-radius: 8px;" id="report-subject"></div>
+                <h3 style="margin-bottom: 10px; color: #4a5568;">Subject</h3>
+                <div style="padding: 15px; background: #f7fafc; border-radius: 8px; font-weight: 600; color: #4a5568;" id="report-subject"></div>
             </div>
 
             <div style="margin: 20px 0;">
                 <h3 style="margin-bottom: 10px; color: #4a5568;">Description</h3>
-                <div style="padding: 15px; background: #f7fafc; border-radius: 8px; white-space: pre-wrap;" id="report-description"></div>
+                <div style="padding: 15px; background: #f7fafc; border-radius: 8px; white-space: pre-wrap; color: #4a5568;" id="report-description"></div>
             </div>
 
             <div class="form-group">
@@ -1377,7 +1599,7 @@
                 </select>
             </div>
 
-            <div style="display: flex; gap: 15px; justify-content: flex-end;">
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
                 <button class="action-btn btn-view" onclick="closeModal('report-modal')">Cancel</button>
                 <button class="action-btn btn-approve" onclick="respondToReport()">Send Response</button>
             </div>
@@ -1409,12 +1631,12 @@
         let currentReportReview = null;
 
         const rolePermissions = {
-            super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports'],
-            main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports'],
+            super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports', 'security-logs', 'suspicious', 'settings'],
+            main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'settings'],
             senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports'],
-            financial: ['dashboard', 'transactions', 'users', 'reports'],
+            financial: ['dashboard', 'transactions', 'users', 'reports', 'financial-overview'],
             support: ['dashboard', 'users', 'reports'],
-            security: ['dashboard', 'users', 'kyc', 'reports'],
+            security: ['dashboard', 'users', 'kyc', 'reports', 'security-logs', 'suspicious'],
             operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports']
         };
 
@@ -1426,13 +1648,19 @@
         }
 
         function formatCurrency(amount) {
-            return `₵${parseFloat(amount || 0).toFixed(2)}`;
+            return `₵${parseFloat(amount || 0).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
 
         function formatDate(timestamp) {
             if (!timestamp) return 'N/A';
             const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            return date.toLocaleDateString('en-GB', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         // Login
@@ -1498,7 +1726,7 @@
 
             document.getElementById('admin-name').textContent = adminData.name;
             document.getElementById('admin-email-display').textContent = adminData.email;
-            document.getElementById('user-avatar').textContent = adminData.name.charAt(0);
+            document.getElementById('user-avatar').textContent = adminData.name.charAt(0).toUpperCase();
             document.getElementById('role-badge').textContent = adminRole.charAt(0).toUpperCase() + adminRole.slice(1) + ' Admin';
             document.getElementById('role-badge').className = `admin-role-badge role-${adminRole}`;
 
@@ -1521,6 +1749,7 @@
             document.getElementById('financial-section').style.display = permissions.includes('transactions') ? 'block' : 'none';
             document.getElementById('admin-section').style.display = permissions.includes('admin-users') ? 'block' : 'none';
             document.getElementById('support-section').style.display = permissions.includes('reports') ? 'block' : 'none';
+            document.getElementById('security-section').style.display = permissions.includes('security-logs') ? 'block' : 'none';
         }
 
         // Navigation
@@ -1528,7 +1757,7 @@
             item.addEventListener('click', () => {
                 const page = item.dataset.page;
                 if (!rolePermissions[adminRole].includes(page)) {
-                    showAlert('No permission', 'error');
+                    showAlert('You do not have permission to access this page', 'error');
                     return;
                 }
                 showPage(page);
@@ -1540,7 +1769,7 @@
             document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
             document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`${page}-content`).classList.remove('hidden');
+            document.getElementById(`${page}-content`)?.classList.remove('hidden');
 
             if (page === 'dashboard') await loadDashboardStats();
             else if (page === 'super-dashboard') await loadSuperDashboard();
@@ -1580,13 +1809,11 @@
 
                 await loadRecentActivity();
             } catch (error) {
-                console.error(error);
+                console.error('Dashboard error:', error);
+                showAlert('Error loading dashboard data', 'error');
             }
         }
 
-       
-
-           
         // Load Recent Activity
         async function loadRecentActivity() {
             const container = document.getElementById('recent-activity');
@@ -1597,7 +1824,7 @@
                 const snapshot = await getDocs(q);
 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p style="text-align: center; color: #718096; padding: 40px;">No recent activity</p>';
+                    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><p>No recent activity</p></div>';
                     return;
                 }
 
@@ -1626,7 +1853,6 @@
                 container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
             }
         }
-       
 
         // Load Super Dashboard
         async function loadSuperDashboard() {
@@ -1647,7 +1873,8 @@
 
                 await loadRealtimeActivity();
             } catch (error) {
-                console.error(error);
+                console.error('Super dashboard error:', error);
+                showAlert('Error loading super dashboard', 'error');
             }
         }
 
@@ -1656,12 +1883,20 @@
             container.innerHTML = '';
 
             try {
-                const q = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'), limit(10));
+                const q = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'), limit(15));
                 const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📊</div><p>No recent activity</p></div>';
+                    return;
+                }
 
                 for (const docSnap of snapshot.docs) {
                     const trans = docSnap.data();
                     const userDoc = await getDoc(doc(db, 'users', trans.userId));
+                    
+                    if (!userDoc.exists()) continue;
+                    
                     const userData = userDoc.data();
 
                     const item = document.createElement('div');
@@ -1671,45 +1906,53 @@
                         <div class="activity-description">
                             <span class="activity-user">${userData.firstName} ${userData.surname}</span>
                             ${trans.type === 'contribution' ? 'contributed' : 'withdrew'} ${formatCurrency(trans.amount)}
+                            <span class="status-badge status-${trans.status}" style="margin-left: 10px; font-size: 0.75rem;">${trans.status.toUpperCase()}</span>
                         </div>
                     `;
                     container.appendChild(item);
                 }
             } catch (error) {
-                container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading</p>';
+                console.error('Activity error:', error);
+                container.innerHTML = '<p style="text-align: center; color: #e53e3e;">Error loading activity</p>';
             }
         }
 
         // Load Users
         async function loadUsers() {
             const tbody = document.getElementById('users-tbody');
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading users...</td></tr>';
 
             try {
                 const snapshot = await getDocs(collection(db, 'users'));
                 tbody.innerHTML = '';
 
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No users found</td></tr>';
+                    return;
+                }
+
                 snapshot.forEach(docSnap => {
                     const user = docSnap.data();
                     const row = tbody.insertRow();
                     row.innerHTML = `
-                        <td>${user.firstName} ${user.surname}</td>
-                        <td>${user.email}</td>
+                        <td>${user.firstName || 'N/A'} ${user.surname || ''}</td>
+                        <td>${user.email || 'N/A'}</td>
                         <td>${formatCurrency(user.balance)}</td>
-                        <td><span class="status-badge status-${user.kycStatus || 'pending'}">${(user.kycStatus || 'pending').toUpperCase()}</span></td>
+                        <td><span class="status-badge status-${user.kycStatus || 'pending'}">${(user.kycStatus || 'pending').replace('_', ' ').toUpperCase()}</span></td>
                         <td>${formatDate(user.createdAt)}</td>
                         <td><button class="action-btn btn-view">View</button></td>
                     `;
                 });
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+                console.error('Users error:', error);
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error loading users: ${error.message}</td></tr>`;
             }
         }
 
         // Load KYC
         async function loadKYC() {
             const tbody = document.getElementById('kyc-tbody');
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading KYC submissions...</td></tr>';
 
             try {
                 const filter = document.getElementById('kyc-filter').value;
@@ -1723,22 +1966,31 @@
                 const snapshot = await getDocs(q);
                 tbody.innerHTML = '';
 
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No KYC submissions found</td></tr>';
+                    return;
+                }
+
                 for (const docSnap of snapshot.docs) {
                     const kyc = docSnap.data();
                     const userDoc = await getDoc(doc(db, 'users', kyc.userId));
+                    
+                    if (!userDoc.exists()) continue;
+                    
                     const userData = userDoc.data();
 
                     const row = tbody.insertRow();
                     row.innerHTML = `
                         <td>${userData.firstName} ${userData.surname}</td>
-                        <td>${kyc.idType.toUpperCase()}</td>
+                        <td>${kyc.idType ? kyc.idType.toUpperCase() : 'N/A'}</td>
                         <td>${formatDate(kyc.submittedAt)}</td>
                         <td><span class="status-badge status-${kyc.status}">${kyc.status.replace('_', ' ').toUpperCase()}</span></td>
                         <td><button class="action-btn btn-view" onclick="window.reviewKYC('${docSnap.id}')">Review</button></td>
                     `;
                 }
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+                console.error('KYC error:', error);
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #e53e3e;">Error loading KYC: ${error.message}</td></tr>`;
             }
         }
 
@@ -1746,23 +1998,36 @@
         window.reviewKYC = async function(id) {
             try {
                 const kycDoc = await getDoc(doc(db, 'kyc_submissions', id));
+                if (!kycDoc.exists()) {
+                    showAlert('KYC submission not found', 'error');
+                    return;
+                }
+                
                 const kycData = kycDoc.data();
                 const userDoc = await getDoc(doc(db, 'users', kycData.userId));
+                
+                if (!userDoc.exists()) {
+                    showAlert('User not found', 'error');
+                    return;
+                }
+                
                 const userData = userDoc.data();
 
                 currentKycReview = { id, data: kycData };
 
                 document.getElementById('kyc-user-name').textContent = `${userData.firstName} ${userData.surname}`;
                 document.getElementById('kyc-user-email').textContent = userData.email;
-                document.getElementById('kyc-id-type').textContent = kycData.idType.toUpperCase();
+                document.getElementById('kyc-id-type').textContent = kycData.idType ? kycData.idType.toUpperCase() : 'N/A';
                 document.getElementById('kyc-submitted').textContent = formatDate(kycData.submittedAt);
-                document.getElementById('kyc-front').src = kycData.frontIdUrl;
-                document.getElementById('kyc-back').src = kycData.backIdUrl;
-                document.getElementById('kyc-selfie').src = kycData.selfieUrl;
+                document.getElementById('kyc-front').src = kycData.frontIdUrl || '';
+                document.getElementById('kyc-back').src = kycData.backIdUrl || '';
+                document.getElementById('kyc-selfie').src = kycData.selfieUrl || '';
+                document.getElementById('kyc-notes').value = '';
 
                 document.getElementById('kyc-modal').style.display = 'block';
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Review KYC error:', error);
+                showAlert('Error loading KYC details: ' + error.message, 'error');
             }
         };
 
@@ -1781,19 +2046,31 @@
                     kycStatus: 'approved'
                 });
 
+                const notificationRef = doc(collection(db, 'notifications'));
+                await setDoc(notificationRef, {
+                    userId: currentKycReview.data.userId,
+                    title: 'KYC Approved',
+                    message: 'Your KYC verification has been approved. You can now access all features.',
+                    type: 'kyc-approval',
+                    read: false,
+                    timestamp: serverTimestamp()
+                });
+
                 showAlert('KYC approved successfully!', 'success');
                 closeModal('kyc-modal');
                 loadKYC();
+                loadDashboardStats();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Approve KYC error:', error);
+                showAlert('Error approving KYC: ' + error.message, 'error');
             }
         };
 
         window.rejectKYC = async function() {
             if (!currentKycReview) return;
             const notes = document.getElementById('kyc-notes').value;
-            if (!notes) {
-                showAlert('Please provide rejection reason', 'error');
+            if (!notes.trim()) {
+                showAlert('Please provide a reason for rejection', 'error');
                 return;
             }
 
@@ -1809,18 +2086,30 @@
                     kycStatus: 'rejected'
                 });
 
+                const notificationRef = doc(collection(db, 'notifications'));
+                await setDoc(notificationRef, {
+                    userId: currentKycReview.data.userId,
+                    title: 'KYC Rejected',
+                    message: `Your KYC verification was rejected. Reason: ${notes}`,
+                    type: 'kyc-rejection',
+                    read: false,
+                    timestamp: serverTimestamp()
+                });
+
                 showAlert('KYC rejected', 'info');
                 closeModal('kyc-modal');
                 loadKYC();
+                loadDashboardStats();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Reject KYC error:', error);
+                showAlert('Error rejecting KYC: ' + error.message, 'error');
             }
         };
 
         // Load Transactions
         async function loadTransactions() {
             const tbody = document.getElementById('trans-tbody');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading transactions...</td></tr>';
 
             try {
                 const status = document.getElementById('trans-filter').value;
@@ -1828,27 +2117,35 @@
 
                 let q;
                 if (status === 'all' && type === 'all') {
-                    q = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'), limit(50));
+                    q = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'), limit(100));
                 } else if (status !== 'all' && type === 'all') {
-                    q = query(collection(db, 'transactions'), where('status', '==', status), orderBy('timestamp', 'desc'), limit(50));
+                    q = query(collection(db, 'transactions'), where('status', '==', status), orderBy('timestamp', 'desc'), limit(100));
                 } else if (status === 'all' && type !== 'all') {
-                    q = query(collection(db, 'transactions'), where('type', '==', type), orderBy('timestamp', 'desc'), limit(50));
+                    q = query(collection(db, 'transactions'), where('type', '==', type), orderBy('timestamp', 'desc'), limit(100));
                 } else {
-                    q = query(collection(db, 'transactions'), where('status', '==', status), where('type', '==', type), orderBy('timestamp', 'desc'), limit(50));
+                    q = query(collection(db, 'transactions'), where('status', '==', status), where('type', '==', type), orderBy('timestamp', 'desc'), limit(100));
                 }
 
                 const snapshot = await getDocs(q);
                 tbody.innerHTML = '';
 
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No transactions found</td></tr>';
+                    return;
+                }
+
                 for (const docSnap of snapshot.docs) {
                     const trans = docSnap.data();
                     const userDoc = await getDoc(doc(db, 'users', trans.userId));
+                    
+                    if (!userDoc.exists()) continue;
+                    
                     const userData = userDoc.data();
 
                     const row = tbody.insertRow();
                     row.innerHTML = `
                         <td>${userData.firstName} ${userData.surname}</td>
-                        <td>${trans.type.toUpperCase()}</td>
+                        <td style="text-transform: capitalize;">${trans.type}</td>
                         <td>${formatCurrency(trans.amount)}</td>
                         <td>${trans.paymentMethod || 'N/A'}</td>
                         <td><span class="status-badge status-${trans.status}">${trans.status.toUpperCase()}</span></td>
@@ -1857,7 +2154,8 @@
                     `;
                 }
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+                console.error('Transactions error:', error);
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error loading transactions: ${error.message}</td></tr>`;
             }
         }
 
@@ -1865,22 +2163,35 @@
         window.reviewTransaction = async function(id) {
             try {
                 const transDoc = await getDoc(doc(db, 'transactions', id));
+                if (!transDoc.exists()) {
+                    showAlert('Transaction not found', 'error');
+                    return;
+                }
+                
                 const transData = transDoc.data();
                 const userDoc = await getDoc(doc(db, 'users', transData.userId));
+                
+                if (!userDoc.exists()) {
+                    showAlert('User not found', 'error');
+                    return;
+                }
+                
                 const userData = userDoc.data();
 
                 currentTransReview = { id, data: transData };
 
                 document.getElementById('trans-user').textContent = `${userData.firstName} ${userData.surname}`;
-                document.getElementById('trans-type').textContent = transData.type.toUpperCase();
+                document.getElementById('trans-type').textContent = transData.type ? transData.type.toUpperCase() : 'N/A';
                 document.getElementById('trans-amount').textContent = formatCurrency(transData.amount);
                 document.getElementById('trans-method').textContent = transData.paymentMethod || 'N/A';
                 document.getElementById('trans-ref').textContent = transData.transactionId || 'N/A';
                 document.getElementById('trans-date').textContent = formatDate(transData.timestamp);
+                document.getElementById('trans-notes').value = '';
 
                 document.getElementById('trans-modal').style.display = 'block';
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Review transaction error:', error);
+                showAlert('Error loading transaction details: ' + error.message, 'error');
             }
         };
 
@@ -1891,7 +2202,8 @@
                 await updateDoc(doc(db, 'transactions', currentTransReview.id), {
                     status: 'approved',
                     reviewedBy: currentAdmin.uid,
-                    reviewedAt: serverTimestamp()
+                    reviewedAt: serverTimestamp(),
+                    reviewNotes: document.getElementById('trans-notes').value
                 });
 
                 if (currentTransReview.data.type === 'contribution') {
@@ -1904,7 +2216,7 @@
                     const monthDays = contributedDays[monthKey] || [];
 
                     const updatedDays = monthDays.map(day => {
-                        if (currentTransReview.data.days.includes(day.day)) {
+                        if (currentTransReview.data.days && currentTransReview.data.days.includes(day.day)) {
                             return { ...day, status: 'approved' };
                         }
                         return day;
@@ -1916,19 +2228,31 @@
                     });
                 }
 
-                showAlert('Transaction approved!', 'success');
+                const notificationRef = doc(collection(db, 'notifications'));
+                await setDoc(notificationRef, {
+                    userId: currentTransReview.data.userId,
+                    title: 'Transaction Approved',
+                    message: `Your ${currentTransReview.data.type} of ${formatCurrency(currentTransReview.data.amount)} has been approved.`,
+                    type: 'transaction-approval',
+                    read: false,
+                    timestamp: serverTimestamp()
+                });
+
+                showAlert('Transaction approved successfully!', 'success');
                 closeModal('trans-modal');
                 loadTransactions();
+                loadDashboardStats();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Approve transaction error:', error);
+                showAlert('Error approving transaction: ' + error.message, 'error');
             }
         };
 
         window.rejectTransaction = async function() {
             if (!currentTransReview) return;
             const notes = document.getElementById('trans-notes').value;
-            if (!notes) {
-                showAlert('Please provide rejection reason', 'error');
+            if (!notes.trim()) {
+                showAlert('Please provide a reason for rejection', 'error');
                 return;
             }
 
@@ -1940,18 +2264,30 @@
                     rejectionReason: notes
                 });
 
+                const notificationRef = doc(collection(db, 'notifications'));
+                await setDoc(notificationRef, {
+                    userId: currentTransReview.data.userId,
+                    title: 'Transaction Rejected',
+                    message: `Your ${currentTransReview.data.type} of ${formatCurrency(currentTransReview.data.amount)} was rejected. Reason: ${notes}`,
+                    type: 'transaction-rejection',
+                    read: false,
+                    timestamp: serverTimestamp()
+                });
+
                 showAlert('Transaction rejected', 'info');
                 closeModal('trans-modal');
                 loadTransactions();
+                loadDashboardStats();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Reject transaction error:', error);
+                showAlert('Error rejecting transaction: ' + error.message, 'error');
             }
         };
 
         // Load Reports
         async function loadReports() {
             const tbody = document.getElementById('reports-tbody');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading reports...</td></tr>';
 
             try {
                 const statusFilter = document.getElementById('report-status-filter').value;
@@ -1972,7 +2308,7 @@
                 tbody.innerHTML = '';
 
                 if (snapshot.empty) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #718096;">No reports found</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No reports found</td></tr>';
                     return;
                 }
 
@@ -2002,13 +2338,19 @@
                 const pendingReports = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
                 document.getElementById('reports-badge').textContent = pendingReports.size;
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+                console.error('Reports error:', error);
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error loading reports: ${error.message}</td></tr>`;
             }
         }
 
         window.reviewReport = async function(id) {
             try {
                 const reportDoc = await getDoc(doc(db, 'reports', id));
+                if (!reportDoc.exists()) {
+                    showAlert('Report not found', 'error');
+                    return;
+                }
+                
                 const reportData = reportDoc.data();
                 const userDoc = await getDoc(doc(db, 'users', reportData.userId));
                 const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User', email: 'N/A' };
@@ -2024,10 +2366,12 @@
                 document.getElementById('report-subject').textContent = reportData.subject;
                 document.getElementById('report-description').textContent = reportData.description;
                 document.getElementById('report-new-status').value = reportData.status;
+                document.getElementById('report-response').value = '';
 
                 document.getElementById('report-modal').style.display = 'block';
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Review report error:', error);
+                showAlert('Error loading report details: ' + error.message, 'error');
             }
         };
 
@@ -2065,19 +2409,26 @@
                 closeModal('report-modal');
                 document.getElementById('report-response').value = '';
                 loadReports();
+                loadDashboardStats();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Respond to report error:', error);
+                showAlert('Error sending response: ' + error.message, 'error');
             }
         };
 
         // Load Admin Users
         async function loadAdminUsers() {
             const tbody = document.getElementById('admins-tbody');
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading admins...</td></tr>';
 
             try {
                 const snapshot = await getDocs(collection(db, 'admins'));
                 tbody.innerHTML = '';
+
+                if (snapshot.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No admin users found</td></tr>';
+                    return;
+                }
 
                 snapshot.forEach(docSnap => {
                     const admin = docSnap.data();
@@ -2095,7 +2446,8 @@
                     `;
                 });
             } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #e53e3e;">Error: ${error.message}</td></tr>`;
+                console.error('Admin users error:', error);
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #e53e3e;">Error loading admin users: ${error.message}</td></tr>`;
             }
         }
 
@@ -2107,50 +2459,67 @@
             const role = document.getElementById('new-admin-role').value;
             const password = document.getElementById('new-admin-pass').value;
 
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adding...';
+
             try {
                 const userCred = await createUserWithEmailAndPassword(auth, email, password);
                 await setDoc(doc(db, 'admins', userCred.user.uid), {
-                    name, email, role,
+                    name, 
+                    email, 
+                    role,
                     createdAt: serverTimestamp(),
                     createdBy: currentAdmin.uid
                 });
 
                 showAlert('Admin added successfully!', 'success');
                 document.getElementById('add-admin-form').reset();
+                loadAdminUsers();
+                
                 await signOut(auth);
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Add admin error:', error);
+                showAlert('Error adding admin: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Admin';
             }
         });
 
         window.removeAdmin = async function(id, email) {
-            if (!confirm(`Remove admin: ${email}?`)) return;
+            if (!confirm(`Are you sure you want to remove admin: ${email}?`)) return;
 
             try {
                 await deleteDoc(doc(db, 'admins', id));
-                showAlert('Admin removed', 'info');
+                showAlert('Admin removed successfully', 'info');
                 loadAdminUsers();
             } catch (error) {
-                showAlert('Error: ' + error.message, 'error');
+                console.error('Remove admin error:', error);
+                showAlert('Error removing admin: ' + error.message, 'error');
             }
         };
 
         async function loadAdminActivity() {
             const container = document.getElementById('admin-activity-list');
-            container.innerHTML = '<p style="text-align: center; padding: 40px;">Loading...</p>';
+            container.innerHTML = '<p class="loading">Loading admin activity...</p>';
 
             try {
                 const q = query(collection(db, 'transactions'), where('reviewedBy', '!=', null), orderBy('reviewedBy'), orderBy('reviewedAt', 'desc'), limit(50));
                 const snapshot = await getDocs(q);
                 container.innerHTML = '';
 
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">👨‍💼</div><p>No admin activity found</p></div>';
+                    return;
+                }
+
                 for (const docSnap of snapshot.docs) {
                     const trans = docSnap.data();
                     const adminDoc = await getDoc(doc(db, 'admins', trans.reviewedBy));
-                    const adminData = adminDoc.exists() ? adminDoc.data() : { name: 'Unknown' };
+                    const adminData = adminDoc.exists() ? adminDoc.data() : { name: 'Unknown Admin' };
 
                     const card = document.createElement('div');
-                    card.style.cssText = 'padding: 15px; background: #f7fafc; border-radius: 8px; margin-bottom: 10px;';
+                    card.style.cssText = 'padding: 15px; background: #f7fafc; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #667eea;';
                     card.innerHTML = `
                         <div style="font-weight: 600; color: #4a5568;">${adminData.name}</div>
                         <div style="font-size: 0.9rem; color: #718096; margin-top: 5px;">
@@ -2161,7 +2530,8 @@
                     container.appendChild(card);
                 }
             } catch (error) {
-                container.innerHTML = `<p style="text-align: center; color: #e53e3e;">Error: ${error.message}</p>`;
+                console.error('Admin activity error:', error);
+                container.innerHTML = `<p style="text-align: center; color: #e53e3e;">Error loading admin activity: ${error.message}</p>`;
             }
         }
 
@@ -2177,12 +2547,15 @@
                     totalBalance += user.balance || 0;
                 });
 
+                const avgBalance = users.size > 0 ? totalBalance / users.size : 0;
+
                 document.getElementById('active-users').textContent = users.size;
                 document.getElementById('new-signups').textContent = Math.floor(users.size * 0.1);
                 document.getElementById('kyc-verified').textContent = kycVerified;
-                document.getElementById('avg-balance').textContent = formatCurrency(users.size > 0 ? totalBalance / users.size : 0);
+                document.getElementById('avg-balance').textContent = formatCurrency(avgBalance);
             } catch (error) {
-                console.error(error);
+                console.error('User analytics error:', error);
+                showAlert('Error loading user analytics', 'error');
             }
         }
 
@@ -2194,13 +2567,13 @@
                 trans.forEach(doc => {
                     const t = doc.data();
                     if (t.type === 'contribution') {
-                        if (t.status === 'approved') totalContrib += t.amount;
-                        else if (t.status === 'pending') pendingValue += t.amount;
+                        if (t.status === 'approved') totalContrib += t.amount || 0;
+                        else if (t.status === 'pending') pendingValue += t.amount || 0;
                     } else if (t.type === 'withdrawal') {
                         if (t.status === 'approved') {
-                            totalWithdraw += t.amount;
+                            totalWithdraw += t.amount || 0;
                             totalCommission += t.commission || 0;
-                        } else if (t.status === 'pending') pendingValue += t.amount;
+                        } else if (t.status === 'pending') pendingValue += t.amount || 0;
                     }
                 });
 
@@ -2209,7 +2582,8 @@
                 document.getElementById('total-commission').textContent = formatCurrency(totalCommission);
                 document.getElementById('pending-value').textContent = formatCurrency(pendingValue);
             } catch (error) {
-                console.error(error);
+                console.error('Financial overview error:', error);
+                showAlert('Error loading financial overview', 'error');
             }
         }
 
@@ -2219,6 +2593,17 @@
         document.getElementById('trans-type-filter').addEventListener('change', loadTransactions);
         document.getElementById('report-status-filter').addEventListener('change', loadReports);
         document.getElementById('report-category-filter').addEventListener('change', loadReports);
+
+        // Search functionality
+        document.getElementById('user-search').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#users-tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
 
         // Mobile menu
         document.getElementById('hamburger-btn').addEventListener('click', () => {
@@ -2234,6 +2619,9 @@
         // Modal functions
         window.closeModal = function(id) {
             document.getElementById(id).style.display = 'none';
+            if (id === 'kyc-modal') currentKycReview = null;
+            if (id === 'trans-modal') currentTransReview = null;
+            if (id === 'report-modal') currentReportReview = null;
         };
 
         window.onclick = function(e) {
@@ -2244,9 +2632,50 @@
 
         // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
-            await signOut(auth);
-            showAlert('Logged out successfully', 'success', 'login-alert');
+            if (confirm('Are you sure you want to logout?')) {
+                try {
+                    await signOut(auth);
+                    showAlert('Logged out successfully', 'success', 'login-alert');
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    showAlert('Error logging out: ' + error.message, 'error');
+                }
+            }
         });
+
+        // Auto-refresh pending badges every 30 seconds
+        setInterval(() => {
+            if (currentAdmin && document.getElementById('dashboard-page').style.display !== 'none') {
+                updatePendingBadges();
+            }
+        }, 30000);
+
+        async function updatePendingBadges() {
+            try {
+                const kycPending = await getDocs(query(collection(db, 'kyc_submissions'), where('status', '==', 'under_review')));
+                const transPending = await getDocs(query(collection(db, 'transactions'), where('status', '==', 'pending')));
+                const reportsPending = await getDocs(query(collection(db, 'reports'), where('status', '==', 'pending')));
+                
+                document.getElementById('kyc-badge').textContent = kycPending.size;
+                document.getElementById('trans-badge').textContent = transPending.size;
+                document.getElementById('reports-badge').textContent = reportsPending.size;
+            } catch (error) {
+                console.error('Error updating badges:', error);
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        console.log('SusuPay Admin Dashboard initialized');
     </script>
 </body>
 </html>
