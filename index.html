@@ -957,6 +957,10 @@
                     <span class="nav-icon">📊</span>
                     <span>User Analytics</span>
                 </div>
+                <div class="sidebar-nav-item" data-page="future-projects">
+    <span class="nav-icon">🎯</span>
+    <span>Future Projects</span>
+</div>
                 <div class="sidebar-nav-item" data-page="financial-overview">
                     <span class="nav-icon">💎</span>
                     <span>Financial Overview</span>
@@ -974,6 +978,10 @@
                     <span>Users</span>
                 </div>
             </div>
+            <div class="sidebar-nav-item" data-page="announcements">
+    <span class="nav-icon">📢</span>
+    <span>Announcements</span>
+</div>
 
             <div class="sidebar-section" id="kyc-section">
                 <div class="sidebar-section-title">Verification</div>
@@ -1441,6 +1449,126 @@
                     </div>
                 </div>
             </div>
+            <!-- Announcements Page -->
+<div id="announcements-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">System Announcements</h2>
+    
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">Send New Announcement</h3>
+        </div>
+        <form id="announcement-form">
+            <div class="form-group">
+                <label>Announcement Title</label>
+                <input type="text" id="announcement-title" required placeholder="e.g., System Maintenance Notice">
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <textarea id="announcement-message" rows="6" required placeholder="Enter your announcement message here..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Priority Level</label>
+                <select id="announcement-priority">
+                    <option value="info">Info (Blue)</option>
+                    <option value="warning">Warning (Yellow)</option>
+                    <option value="urgent">Urgent (Red)</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button type="submit" class="btn">Send to All Users</button>
+                <span id="announcement-status" style="color: #718096;"></span>
+            </div>
+        </form>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Announcements</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Message Preview</th>
+                        <th>Priority</th>
+                        <th>Sent By</th>
+                        <th>Date</th>
+                        <th>Recipients</th>
+                    </tr>
+                </thead>
+                <tbody id="announcements-tbody">
+                    <tr><td colspan="6" class="loading">Loading announcements...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+            <!-- Future Projects Admin Page -->
+<div id="future-projects-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">Future Projects Management</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Projects</div>
+            <div class="stat-value" id="admin-total-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active Projects</div>
+            <div class="stat-value" id="admin-active-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Matured Projects</div>
+            <div class="stat-value" id="admin-matured-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Locked Value</div>
+            <div class="stat-value" id="admin-locked-value">₵0</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">All Future Projects</h3>
+            <div class="filter-group">
+                <select class="filter-select" id="project-status-filter" onchange="loadAdminFutureProjects()">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="matured">Matured</option>
+                </select>
+                <select class="filter-select" id="project-type-filter" onchange="loadAdminFutureProjects()">
+                    <option value="all">All Types</option>
+                    <option value="kids">For Kids</option>
+                    <option value="myself">For Myself</option>
+                    <option value="parents">For Parents</option>
+                    <option value="spouse">For Spouse</option>
+                    <option value="family">Family Project</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="imminent">Imminent</option>
+                </select>
+            </div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Project Title</th>
+                        <th>Type</th>
+                        <th>Current/Goal</th>
+                        <th>Progress</th>
+                        <th>Maturity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-projects-tbody">
+                    <tr><td colspan="8" class="loading">Loading projects...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
         </main>
     </div>
 
@@ -1631,14 +1759,14 @@
         let currentReportReview = null;
 
         const rolePermissions = {
-            super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports', 'security-logs', 'suspicious', 'settings'],
-            main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'settings'],
-            senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports'],
-            financial: ['dashboard', 'transactions', 'users', 'reports', 'financial-overview'],
-            support: ['dashboard', 'users', 'reports'],
-            security: ['dashboard', 'users', 'kyc', 'reports', 'security-logs', 'suspicious'],
-            operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports']
-        };
+    super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports', 'security-logs', 'suspicious', 'settings', 'future-projects', 'announcements'],
+    main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'settings', 'future-projects', 'announcements'],
+    senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'future-projects', 'announcements'],
+    financial: ['dashboard', 'transactions', 'users', 'reports', 'financial-overview', 'future-projects'],
+    support: ['dashboard', 'users', 'reports', 'announcements'],
+    security: ['dashboard', 'users', 'kyc', 'reports', 'security-logs', 'suspicious'],
+    operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports', 'future-projects', 'announcements']
+};
 
         // Utility functions
         function showAlert(msg, type, container = 'dashboard-alert') {
@@ -1771,16 +1899,18 @@
             document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
             document.getElementById(`${page}-content`)?.classList.remove('hidden');
 
-            if (page === 'dashboard') await loadDashboardStats();
-            else if (page === 'super-dashboard') await loadSuperDashboard();
-            else if (page === 'users') await loadUsers();
-            else if (page === 'kyc') await loadKYC();
-            else if (page === 'transactions') await loadTransactions();
-            else if (page === 'admin-users') await loadAdminUsers();
-            else if (page === 'admin-activity') await loadAdminActivity();
-            else if (page === 'user-analytics') await loadUserAnalytics();
-            else if (page === 'financial-overview') await loadFinancialOverview();
-            else if (page === 'reports') await loadReports();
+           if (page === 'dashboard') await loadDashboardStats();
+else if (page === 'super-dashboard') await loadSuperDashboard();
+else if (page === 'users') await loadUsers();
+else if (page === 'kyc') await loadKYC();
+else if (page === 'transactions') await loadTransactions();
+else if (page === 'admin-users') await loadAdminUsers();
+else if (page === 'admin-activity') await loadAdminActivity();
+else if (page === 'user-analytics') await loadUserAnalytics();
+else if (page === 'financial-overview') await loadFinancialOverview();
+else if (page === 'reports') await loadReports();
+else if (page === 'future-projects') await loadAdminFutureProjects();
+else if (page === 'announcements') await loadAnnouncements();
         }
 
         // Load Dashboard Stats
@@ -2247,6 +2377,7 @@
                 showAlert('Error approving transaction: ' + error.message, 'error');
             }
         };
+       
 
         window.rejectTransaction = async function() {
             if (!currentTransReview) return;
@@ -2283,6 +2414,323 @@
                 showAlert('Error rejecting transaction: ' + error.message, 'error');
             }
         };
+const adminFutureProjectsHTML = `
+<!-- Future Projects Page -->
+<div id="future-projects-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">Future Projects Management</h2>
+    
+    <div class="stats-grid" style="margin-bottom: 30px;">
+        <div class="stat-card">
+            <div class="stat-label">Total Projects</div>
+            <div class="stat-value" id="admin-total-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active Projects</div>
+            <div class="stat-value" id="admin-active-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Matured Projects</div>
+            <div class="stat-value" id="admin-matured-projects">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Locked Value</div>
+            <div class="stat-value" id="admin-locked-value">₵0</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">All Future Projects</h3>
+            <div class="filter-group">
+                <select class="filter-select" id="project-status-filter">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="matured">Matured</option>
+                    <option value="withdrawn">Withdrawn</option>
+                </select>
+                <select class="filter-select" id="project-type-filter">
+                    <option value="all">All Types</option>
+                    <option value="kids">For Kids</option>
+                    <option value="myself">For Myself</option>
+                    <option value="parents">For Parents</option>
+                    <option value="spouse">For Spouse</option>
+                    <option value="family">Family Project</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="imminent">Imminent</option>
+                </select>
+            </div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Project Title</th>
+                        <th>Type</th>
+                        <th>Current Amount</th>
+                        <th>Goal Amount</th>
+                        <th>Progress</th>
+                        <th>Maturity Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-projects-tbody">
+                    <tr><td colspan="9" class="loading">Loading projects...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+`;
+
+
+// FIX 4: Admin Function to Load Future Projects
+async function loadAdminFutureProjects() {
+    const tbody = document.getElementById('admin-projects-tbody');
+    tbody.innerHTML = '<tr><td colspan="9" class="loading">Loading projects...</td></tr>';
+
+    try {
+        const statusFilter = document.getElementById('project-status-filter').value;
+        const typeFilter = document.getElementById('project-type-filter').value;
+
+        let q;
+        if (statusFilter === 'all' && typeFilter === 'all') {
+            q = query(collection(db, 'future_projects'), orderBy('createdAt', 'desc'));
+        } else if (statusFilter !== 'all' && typeFilter === 'all') {
+            q = query(collection(db, 'future_projects'), where('status', '==', statusFilter), orderBy('createdAt', 'desc'));
+        } else if (statusFilter === 'all' && typeFilter !== 'all') {
+            q = query(collection(db, 'future_projects'), where('type', '==', typeFilter), orderBy('createdAt', 'desc'));
+        } else {
+            q = query(
+                collection(db, 'future_projects'), 
+                where('status', '==', statusFilter), 
+                where('type', '==', typeFilter), 
+                orderBy('createdAt', 'desc')
+            );
+        }
+
+        const snapshot = await getDocs(q);
+        tbody.innerHTML = '';
+
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No projects found</td></tr>';
+            return;
+        }
+
+        let totalProjects = 0;
+        let activeProjects = 0;
+        let maturedProjects = 0;
+        let totalLockedValue = 0;
+
+        for (const docSnap of snapshot.docs) {
+            const project = docSnap.data();
+            const userDoc = await getDoc(doc(db, 'users', project.userId));
+            
+            if (!userDoc.exists()) continue;
+            
+            const userData = userDoc.data();
+            const progress = (project.currentAmount / project.goalAmount) * 100;
+            const maturityDate = project.maturityDate?.toDate ? project.maturityDate.toDate() : new Date(project.maturityDate);
+            const isMatured = new Date() >= maturityDate;
+
+            totalProjects++;
+            if (project.status === 'active') activeProjects++;
+            if (isMatured) maturedProjects++;
+            if (project.status === 'active') totalLockedValue += project.currentAmount || 0;
+
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${userData.firstName} ${userData.surname}</td>
+                <td>${project.title}</td>
+                <td style="text-transform: capitalize;">${project.type.replace('-', ' ')}</td>
+                <td>${formatCurrency(project.currentAmount || 0)}</td>
+                <td>${formatCurrency(project.goalAmount)}</td>
+                <td>
+                    <div style="width: 100%; background: #e2e8f0; border-radius: 10px; height: 8px; overflow: hidden;">
+                        <div style="width: ${Math.min(progress, 100)}%; height: 100%; background: #48bb78; border-radius: 10px;"></div>
+                    </div>
+                    <small style="color: #718096;">${progress.toFixed(1)}%</small>
+                </td>
+                <td>${maturityDate.toLocaleDateString()}</td>
+                <td>
+                    <span class="status-badge ${isMatured ? 'status-approved' : 'status-pending'}">
+                        ${isMatured ? 'MATURED' : project.status.toUpperCase()}
+                    </span>
+                </td>
+                <td><button class="action-btn btn-view" onclick="window.viewAdminProjectDetails('${docSnap.id}')">View</button></td>
+            `;
+        }
+
+        // Update stats
+        document.getElementById('admin-total-projects').textContent = totalProjects;
+        document.getElementById('admin-active-projects').textContent = activeProjects;
+        document.getElementById('admin-matured-projects').textContent = maturedProjects;
+        document.getElementById('admin-locked-value').textContent = formatCurrency(totalLockedValue);
+
+    } catch (error) {
+        console.error('Admin projects error:', error);
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #e53e3e;">Error loading projects: ${error.message}</td></tr>`;
+    }
+}
+
+// FIX 5: Optimized Project Maturity Checker (runs once per hour)
+let maturityCheckInterval = null;
+
+function startMaturityChecker() {
+    // Clear existing interval
+    if (maturityCheckInterval) {
+        clearInterval(maturityCheckInterval);
+    }
+    
+    // Check immediately
+    checkProjectMaturity();
+    
+    // Then check every hour
+    maturityCheckInterval = setInterval(() => {
+        checkProjectMaturity();
+    }, 60 * 60 * 1000); // 1 hour
+}
+
+async function checkProjectMaturity() {
+    if (!currentUser || !activeProjects || activeProjects.length === 0) return;
+    
+    console.log('🔍 Checking project maturity...');
+    
+    try {
+        const now = new Date();
+        
+        for (const project of activeProjects) {
+            const maturityDate = project.maturityDate instanceof Date ? 
+                project.maturityDate : 
+                (project.maturityDate?.toDate ? project.maturityDate.toDate() : new Date(project.maturityDate));
+            
+            const daysUntilMaturity = Math.ceil((maturityDate - now) / (1000 * 60 * 60 * 24));
+            
+            // 30-day warning
+            if (daysUntilMaturity === 30) {
+                const notifKey = `maturity_30day_${project.id}`;
+                if (!localStorage.getItem(notifKey)) {
+                    await createNotification(
+                        '📅 Project Maturing Soon',
+                        `Your "${project.title}" matures in 30 days! You'll earn 20% interest.`,
+                        'info'
+                    );
+                    localStorage.setItem(notifKey, 'true');
+                }
+            }
+            
+            // 7-day warning
+            if (daysUntilMaturity === 7) {
+                const notifKey = `maturity_7day_${project.id}`;
+                if (!localStorage.getItem(notifKey)) {
+                    await createNotification(
+                        '⏰ Project Maturing This Week',
+                        `Your "${project.title}" matures in 7 days!`,
+                        'info'
+                    );
+                    localStorage.setItem(notifKey, 'true');
+                }
+            }
+            
+            // Matured today
+            if (daysUntilMaturity <= 0 && daysUntilMaturity > -1) {
+                const notifKey = `maturity_complete_${project.id}`;
+                if (!localStorage.getItem(notifKey)) {
+                    const interest = project.currentAmount * 0.20;
+                    const total = project.currentAmount + interest;
+                    
+                    await createNotification(
+                        '🎉 Project Matured!',
+                        `Congratulations! "${project.title}" has matured. Total: ${formatCurrency(total)}`,
+                        'success'
+                    );
+                    
+                    localStorage.setItem(notifKey, 'true');
+                    
+                    // Update project status in Firestore
+                    await updateDoc(doc(db, 'future_projects', project.id), {
+                        status: 'matured'
+                    });
+                    
+                    // Celebration
+                    celebrateMaturity(project.title, total);
+                }
+            }
+        }
+        
+        console.log('✅ Maturity check complete');
+        
+    } catch (error) {
+        console.error('❌ Error checking maturity:', error);
+    }
+}
+
+// FIX 6: Enhanced Timer Display with Better UX
+function updateTimerDisplay() {
+    if (!currentUser) return;
+    
+    const timerDisplay = document.getElementById('timer-display');
+    const sessionTimer = document.getElementById('session-timer');
+    
+    if (!timerDisplay || !sessionTimer) return;
+    
+    const timeSinceLastActivity = Date.now() - lastActivityTime;
+    const timeRemaining = Math.max(0, INACTIVITY_TIMEOUT - timeSinceLastActivity);
+    
+    if (timeRemaining === 0) {
+        handleInactivityLogout();
+        return;
+    }
+    
+    const minutes = Math.floor(timeRemaining / 60000);
+    const seconds = Math.floor((timeRemaining % 60000) / 1000);
+    
+    timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Show timer when less than 2 minutes remaining
+    if (timeRemaining <= 120000) {
+        sessionTimer.style.display = 'flex';
+        
+        // Color coding
+        if (timeRemaining <= 60000) {
+            timerDisplay.style.color = '#e53e3e';
+            timerDisplay.style.fontWeight = '700';
+            
+            // Flash warning at 30 seconds
+            if (timeRemaining <= 30000 && Math.floor(seconds) % 2 === 0) {
+                timerDisplay.style.opacity = '0.5';
+                setTimeout(() => {
+                    if (timerDisplay) timerDisplay.style.opacity = '1';
+                }, 500);
+            }
+        } else {
+            timerDisplay.style.color = '#f6cc33';
+            timerDisplay.style.fontWeight = '600';
+        }
+    } else {
+        sessionTimer.style.display = 'none';
+    }
+}
+
+// FIX 7: Initialize everything properly on load
+async function initializeEnhancedSystems() {
+    if (!currentUser) return;
+    
+    console.log('🚀 Initializing enhanced systems...');
+    
+    // Start maturity checker
+    startMaturityChecker();
+    
+    // Update timer every second
+    setInterval(updateTimerDisplay, 1000);
+    
+    // Initial updates
+    updateVIPProgress();
+    updateTimerDisplay();
+    
+    console.log('✅ Enhanced systems initialized');
+}
 
         // Load Reports
         async function loadReports() {
@@ -2674,6 +3122,151 @@
                 });
             }
         });
+        // Load Announcements
+async function loadAnnouncements() {
+    const tbody = document.getElementById('announcements-tbody');
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading announcements...</td></tr>';
+
+    try {
+        const q = query(collection(db, 'announcements'), orderBy('sentAt', 'desc'), limit(50));
+        const snapshot = await getDocs(q);
+        tbody.innerHTML = '';
+
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No announcements sent yet</td></tr>';
+            return;
+        }
+
+        for (const docSnap of snapshot.docs) {
+            const announcement = docSnap.data();
+            const adminDoc = await getDoc(doc(db, 'admins', announcement.sentBy));
+            const adminData = adminDoc.exists() ? adminDoc.data() : { name: 'Unknown Admin' };
+
+            const priorityColors = {
+                info: 'background: #bee3f8; color: #2a4365;',
+                warning: 'background: #fef5e7; color: #744210;',
+                urgent: 'background: #fed7d7; color: #742a2a;'
+            };
+
+            const messagePreview = announcement.message.length > 80 
+                ? announcement.message.substring(0, 80) + '...' 
+                : announcement.message;
+
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td style="font-weight: 600;">${announcement.title}</td>
+                <td>${messagePreview}</td>
+                <td><span class="status-badge" style="${priorityColors[announcement.priority]}">${announcement.priority.toUpperCase()}</span></td>
+                <td>${adminData.name}</td>
+                <td>${formatDate(announcement.sentAt)}</td>
+                <td style="text-align: center;">${announcement.recipientCount || 0}</td>
+            `;
+        }
+    } catch (error) {
+        console.error('Announcements error:', error);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error loading announcements: ${error.message}</td></tr>`;
+    }
+}
+
+// Send Announcement
+const announcementForm = document.getElementById('announcement-form');
+if (announcementForm) {
+    announcementForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const title = document.getElementById('announcement-title').value;
+        const message = document.getElementById('announcement-message').value;
+        const priority = document.getElementById('announcement-priority').value;
+        const statusSpan = document.getElementById('announcement-status');
+        const submitBtn = announcementForm.querySelector('button[type="submit"]');  // ✅ FIXED
+
+        if (!confirm(`Send this announcement to ALL users?\n\nTitle: ${title}\n\nThis action cannot be undone.`)) {
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        statusSpan.textContent = 'Fetching users...';
+        statusSpan.style.color = '#667eea';
+
+        try {
+            // Get all users
+            const usersSnapshot = await getDocs(collection(db, 'users'));
+            const userCount = usersSnapshot.size;
+
+            statusSpan.textContent = `Sending to ${userCount} users...`;
+
+            // Save announcement record
+            const announcementRef = doc(collection(db, 'announcements'));
+            await setDoc(announcementRef, {
+                title,
+                message,
+                priority,
+                sentBy: currentAdmin.uid,
+                sentAt: serverTimestamp(),
+                recipientCount: userCount
+            });
+
+            // Send notification to each user
+            let sentCount = 0;
+            const batch = [];
+            
+            for (const userDoc of usersSnapshot.docs) {
+                const notificationRef = doc(collection(db, 'notifications'));
+                batch.push(
+                    setDoc(notificationRef, {
+                        userId: userDoc.id,
+                        title: `📢 ${title}`,
+                        message: message,
+                        type: 'announcement',
+                        priority: priority,
+                        read: false,
+                        timestamp: serverTimestamp()
+                    })
+                );
+                
+                sentCount++;
+                
+                // Update status every 10 users
+                if (sentCount % 10 === 0) {
+                    statusSpan.textContent = `Sent to ${sentCount}/${userCount} users...`;
+                }
+                
+                // Process in batches of 50 to avoid rate limits
+                if (batch.length >= 50) {
+                    await Promise.all(batch);
+                    batch.length = 0;
+                    await new Promise(resolve => setTimeout(resolve, 100)); // Small delay
+                }
+            }
+            
+            // Send remaining batch
+            if (batch.length > 0) {
+                await Promise.all(batch);
+            }
+
+            showAlert(`✅ Announcement sent successfully to ${userCount} users!`, 'success');
+            statusSpan.textContent = `✓ Sent to ${userCount} users`;
+            statusSpan.style.color = '#48bb78';
+            
+            announcementForm.reset();
+            loadAnnouncements();
+
+            setTimeout(() => {
+                statusSpan.textContent = '';
+            }, 5000);
+
+        } catch (error) {
+            console.error('Send announcement error:', error);
+            showAlert('Error sending announcement: ' + error.message, 'error');
+            statusSpan.textContent = '✗ Failed to send';
+            statusSpan.style.color = '#e53e3e';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send to All Users';
+        }
+    });
+}
 
         console.log('SusuPay Admin Dashboard initialized');
     </script>
