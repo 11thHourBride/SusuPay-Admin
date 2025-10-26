@@ -3167,8 +3167,68 @@ async function loadAnnouncements() {
         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error loading announcements: ${error.message}</td></tr>`;
     }
 }
+// Process contribution approval and update VIP
+async function processContributionApproval(transactionId, userId, amount) {
+    /* 
+    THIS IS ADMIN BACKEND CODE - For reference
+    
+    When admin approves a contribution:
+    1. Update transaction status to 'approved'
+    2. Add amount to user's totalContributions
+    3. Update user's balance
+    4. Check for VIP promotion
+    */
+    
+    try {
+        // Update transaction
+        await updateDoc(doc(db, 'transactions', transactionId), {
+            status: 'approved',
+            approvedAt: serverTimestamp()
+        });
+        
+        // Get user data
+        const userRef = doc(db, 'users', userId);
+        const userDoc = await getDoc(userRef);
+        const user = userDoc.data();
+        
+        // Calculate new totals
+        const newTotalContributions = (user.totalContributions || 0) + amount;
+        const newBalance = (user.balance || 0) + amount;
+        
+        // Update user data
+        await updateDoc(userRef, {
+            totalContributions: newTotalContributions,
+            balance: newBalance
+        });
+        
+        // Check for VIP promotion
+        const currentLevel = user.vipLevel;
+        const newLevel = calculateVIPLevel(newTotalContributions, user.kycStatus);
+        
+        if (newLevel > currentLevel) {
+            await updateDoc(userRef, {
+                vipLevel: newLevel
+            });
+            
+            // Send promotion notification
+            await addDoc(collection(db, 'notifications'), {
+                userId: userId,
+                title: '🎉 VIP Level Up!',
+                message: `Congratulations! You've been promoted to ${getVIPBenefits(newLevel).name}!`,
+                type: 'vip_promotion',
+                read: false,
+                timestamp: serverTimestamp()
+            });
+        }
+        
+        console.log('✅ Contribution approved and VIP checked');
+        
+    } catch (error) {
+        console.error('❌ Error processing contribution:', error);
+    }
+}
 
-// Send Announcement
+// Send Announcement - IMPROVED VERSION
 const announcementForm = document.getElementById('announcement-form');
 if (announcementForm) {
     announcementForm.addEventListener('submit', async (e) => {
@@ -3178,7 +3238,7 @@ if (announcementForm) {
         const message = document.getElementById('announcement-message').value;
         const priority = document.getElementById('announcement-priority').value;
         const statusSpan = document.getElementById('announcement-status');
-        const submitBtn = announcementForm.querySelector('button[type="submit"]');  // ✅ FIXED
+        const submitBtn = announcementForm.querySelector('button[type="submit"]');
 
         if (!confirm(`Send this announcement to ALL users?\n\nTitle: ${title}\n\nThis action cannot be undone.`)) {
             return;
@@ -3194,27 +3254,41 @@ if (announcementForm) {
             const usersSnapshot = await getDocs(collection(db, 'users'));
             const userCount = usersSnapshot.size;
 
-            statusSpan.textContent = `Sending to ${userCount} users...`;
+            if (userCount === 0) {
+                showAlert('No users found to send announcement to', 'info');
+                return;
+            }
 
-            // Save announcement record
-            const announcementRef = doc(collection(db, 'announcements'));
-            await setDoc(announcementRef, {
-                title,
-                message,
-                priority,
-                sentBy: currentAdmin.uid,
-                sentAt: serverTimestamp(),
-                recipientCount: userCount
-            });
+            statusSpan.textContent = `Preparing to send to ${userCount} users...`;
 
-            // Send notification to each user
+            // Save announcement record FIRST
+            try {
+                const announcementRef = doc(collection(db, 'announcements'));
+                await setDoc(announcementRef, {
+                    title,
+                    message,
+                    priority,
+                    sentBy: currentAdmin.uid,
+                    sentAt: serverTimestamp(),
+                    recipientCount: userCount
+                });
+                console.log('✅ Announcement record saved');
+            } catch (announceError) {
+                console.error('❌ Error saving announcement:', announceError);
+                showAlert('Error saving announcement record: ' + announceError.message, 'error');
+                return;
+            }
+
+            // Send notifications one by one with error handling
             let sentCount = 0;
-            const batch = [];
+            let failedCount = 0;
+            
+            statusSpan.textContent = `Sending to ${userCount} users...`;
             
             for (const userDoc of usersSnapshot.docs) {
-                const notificationRef = doc(collection(db, 'notifications'));
-                batch.push(
-                    setDoc(notificationRef, {
+                try {
+                    const notificationRef = doc(collection(db, 'notifications'));
+                    await setDoc(notificationRef, {
                         userId: userDoc.id,
                         title: `📢 ${title}`,
                         message: message,
@@ -3222,32 +3296,36 @@ if (announcementForm) {
                         priority: priority,
                         read: false,
                         timestamp: serverTimestamp()
-                    })
-                );
-                
-                sentCount++;
-                
-                // Update status every 10 users
-                if (sentCount % 10 === 0) {
-                    statusSpan.textContent = `Sent to ${sentCount}/${userCount} users...`;
+                    });
+                    
+                    sentCount++;
+                    
+                    // Update status every 5 users
+                    if (sentCount % 5 === 0) {
+                        statusSpan.textContent = `Sent to ${sentCount}/${userCount} users...`;
+                    }
+                    
+                    // Small delay to avoid rate limits
+                    if (sentCount % 10 === 0) {
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    }
+                    
+                } catch (notifError) {
+                    console.error(`Failed to send to user ${userDoc.id}:`, notifError);
+                    failedCount++;
                 }
-                
-                // Process in batches of 50 to avoid rate limits
-                if (batch.length >= 50) {
-                    await Promise.all(batch);
-                    batch.length = 0;
-                    await new Promise(resolve => setTimeout(resolve, 100)); // Small delay
-                }
-            }
-            
-            // Send remaining batch
-            if (batch.length > 0) {
-                await Promise.all(batch);
             }
 
-            showAlert(`✅ Announcement sent successfully to ${userCount} users!`, 'success');
-            statusSpan.textContent = `✓ Sent to ${userCount} users`;
-            statusSpan.style.color = '#48bb78';
+            // Show results
+            if (sentCount > 0) {
+                showAlert(`✅ Announcement sent to ${sentCount} users${failedCount > 0 ? ` (${failedCount} failed)` : ''}!`, 'success');
+                statusSpan.textContent = `✓ Sent to ${sentCount} users${failedCount > 0 ? ` (${failedCount} failed)` : ''}`;
+                statusSpan.style.color = '#48bb78';
+            } else {
+                showAlert('❌ Failed to send announcement to any users', 'error');
+                statusSpan.textContent = '✗ Failed to send';
+                statusSpan.style.color = '#e53e3e';
+            }
             
             announcementForm.reset();
             loadAnnouncements();
@@ -3259,7 +3337,7 @@ if (announcementForm) {
         } catch (error) {
             console.error('Send announcement error:', error);
             showAlert('Error sending announcement: ' + error.message, 'error');
-            statusSpan.textContent = '✗ Failed to send';
+            statusSpan.textContent = '✗ Failed: ' + error.message;
             statusSpan.style.color = '#e53e3e';
         } finally {
             submitBtn.disabled = false;
