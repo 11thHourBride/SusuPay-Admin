@@ -1467,13 +1467,23 @@
                 <textarea id="announcement-message" rows="6" required placeholder="Enter your announcement message here..."></textarea>
             </div>
             <div class="form-group">
-                <label>Priority Level</label>
-                <select id="announcement-priority">
-                    <option value="info">Info (Blue)</option>
-                    <option value="warning">Warning (Yellow)</option>
-                    <option value="urgent">Urgent (Red)</option>
-                </select>
-            </div>
+    <label>Announcement Category</label>
+    <select id="announcement-category" required>
+        <option value="updates">Updates</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="new-features">New Features</option>
+        <option value="promotions">Promotions</option>
+        <option value="alerts">Alerts</option>
+    </select>
+</div>
+<div class="form-group">
+    <label>Priority Level</label>
+    <select id="announcement-priority">
+        <option value="info">Info (Blue)</option>
+        <option value="warning">Warning (Yellow)</option>
+        <option value="urgent">Urgent (Red)</option>
+    </select>
+</div>
             <div style="display: flex; gap: 15px; align-items: center;">
                 <button type="submit" class="btn">Send to All Users</button>
                 <span id="announcement-status" style="color: #718096;"></span>
@@ -1488,15 +1498,16 @@
         <div style="overflow-x: auto;">
             <table class="data-table">
                 <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Message Preview</th>
-                        <th>Priority</th>
-                        <th>Sent By</th>
-                        <th>Date</th>
-                        <th>Recipients</th>
-                    </tr>
-                </thead>
+    <tr>
+        <th>Title</th>
+        <th>Message Preview</th>
+        <th>Category</th>
+        <th>Priority</th>
+        <th>Sent By</th>
+        <th>Date</th>
+        <th>Recipients</th>
+    </tr>
+</thead>
                 <tbody id="announcements-tbody">
                     <tr><td colspan="6" class="loading">Loading announcements...</td></tr>
                 </tbody>
@@ -3125,7 +3136,7 @@ async function initializeEnhancedSystems() {
         // Load Announcements
 async function loadAnnouncements() {
     const tbody = document.getElementById('announcements-tbody');
-    tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading announcements...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading announcements...</td></tr>';
 
     try {
         const q = query(collection(db, 'announcements'), orderBy('sentAt', 'desc'), limit(50));
@@ -3133,7 +3144,7 @@ async function loadAnnouncements() {
         tbody.innerHTML = '';
 
         if (snapshot.empty) {
-            tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No announcements sent yet</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No announcements sent yet</td></tr>';
             return;
         }
 
@@ -3148,14 +3159,23 @@ async function loadAnnouncements() {
                 urgent: 'background: #fed7d7; color: #742a2a;'
             };
 
-            const messagePreview = announcement.message.length > 80 
-                ? announcement.message.substring(0, 80) + '...' 
+            const categoryColors = {
+                updates: 'background: #c6f6d5; color: #22543d;',
+                maintenance: 'background: #fef5e7; color: #744210;',
+                'new-features': 'background: #e9d8fd; color: #44337a;',
+                promotions: 'background: #fef5e7; color: #c05621;',
+                alerts: 'background: #fed7d7; color: #742a2a;'
+            };
+
+            const messagePreview = announcement.message.length > 60 
+                ? announcement.message.substring(0, 60) + '...' 
                 : announcement.message;
 
             const row = tbody.insertRow();
             row.innerHTML = `
                 <td style="font-weight: 600;">${announcement.title}</td>
                 <td>${messagePreview}</td>
+                <td><span class="status-badge" style="${categoryColors[announcement.category] || categoryColors.updates}">${(announcement.category || 'updates').replace('-', ' ').toUpperCase()}</span></td>
                 <td><span class="status-badge" style="${priorityColors[announcement.priority]}">${announcement.priority.toUpperCase()}</span></td>
                 <td>${adminData.name}</td>
                 <td>${formatDate(announcement.sentAt)}</td>
@@ -3164,7 +3184,7 @@ async function loadAnnouncements() {
         }
     } catch (error) {
         console.error('Announcements error:', error);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error loading announcements: ${error.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #e53e3e;">Error loading announcements: ${error.message}</td></tr>`;
     }
 }
 // Process contribution approval and update VIP
@@ -3227,7 +3247,6 @@ async function processContributionApproval(transactionId, userId, amount) {
         console.error('❌ Error processing contribution:', error);
     }
 }
-
 // Send Announcement - IMPROVED VERSION
 const announcementForm = document.getElementById('announcement-form');
 if (announcementForm) {
@@ -3236,11 +3255,12 @@ if (announcementForm) {
         
         const title = document.getElementById('announcement-title').value;
         const message = document.getElementById('announcement-message').value;
+        const category = document.getElementById('announcement-category').value;
         const priority = document.getElementById('announcement-priority').value;
         const statusSpan = document.getElementById('announcement-status');
         const submitBtn = announcementForm.querySelector('button[type="submit"]');
 
-        if (!confirm(`Send this announcement to ALL users?\n\nTitle: ${title}\n\nThis action cannot be undone.`)) {
+        if (!confirm(`Send this announcement to ALL users?\n\nTitle: ${title}\nCategory: ${category.toUpperCase()}\n\nThis action cannot be undone.`)) {
             return;
         }
 
@@ -3267,6 +3287,7 @@ if (announcementForm) {
                 await setDoc(announcementRef, {
                     title,
                     message,
+                    category, // ✅ NEW: Store category
                     priority,
                     sentBy: currentAdmin.uid,
                     sentAt: serverTimestamp(),
@@ -3293,6 +3314,7 @@ if (announcementForm) {
                         title: `📢 ${title}`,
                         message: message,
                         type: 'announcement',
+                        category: category, // ✅ NEW: Include category
                         priority: priority,
                         read: false,
                         timestamp: serverTimestamp()
