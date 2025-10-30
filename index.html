@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SusuPay Admin Dashboard</title>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,7 +18,610 @@
             min-height: 100vh;
             color: #333;
         }
+/* ============================================
+           PROFESSIONAL LOADER STYLES - COPY THESE
+           ============================================ */
 
+        /* Full Page Loader */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: white;
+        }
+
+        /* Spinning Ring Loader */
+        .spinner-ring {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            position: relative;
+        }
+
+        .spinner-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border: 6px solid #fff;
+            border-radius: 50%;
+            animation: spinner-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: #fff transparent transparent transparent;
+        }
+
+        .spinner-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+        }
+
+        .spinner-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+        }
+
+        .spinner-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+        }
+
+        @keyframes spinner-ring {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loader-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .loader-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px auto 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #fff 0%, #ffd700 50%, #fff 100%);
+            background-size: 200% 100%;
+            animation: progress-slide 2s ease-in-out infinite;
+            border-radius: 10px;
+        }
+
+        @keyframes progress-slide {
+            0% {
+                width: 20%;
+                background-position: 0% 50%;
+            }
+            50% {
+                width: 60%;
+                background-position: 100% 50%;
+            }
+            100% {
+                width: 100%;
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Dots Loader */
+        .dots-loader {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            background: white;
+            border-radius: 50%;
+            animation: dot-bounce 1.4s ease-in-out infinite;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes dot-bounce {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Mini Loader for buttons/cards */
+        .mini-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Skeleton Loader for tables */
+        .skeleton-row {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        /* ============================================
+   MODAL STYLES - ADD THIS SECTION
+   ============================================ */
+
+/* Modal Overlay */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10001;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Modal Content Box */
+.modal-content {
+    position: relative;
+    background: white;
+    margin: 50px auto;
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 900px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f7fafc;
+}
+
+.modal-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4a5568;
+}
+
+/* Close Button */
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #718096;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal-btn:hover {
+    background: #f7fafc;
+    color: #4a5568;
+    transform: rotate(90deg);
+}
+
+/* Details Grid */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.detail-card {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: #718096;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #4a5568;
+    word-break: break-word;
+}
+
+/* Modal Sections */
+.modal-section {
+    margin-bottom: 30px;
+}
+
+.modal-section-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #4a5568;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Progress Bar in Modal */
+.progress-container {
+    width: 100%;
+    background: #e2e8f0;
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Status Badges for Modal */
+.status-active {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+.status-matured {
+    background: #fef5e7;
+    color: #744210;
+}
+
+.status-withdrawn {
+    background: #e6fffa;
+    color: #234e52;
+}
+
+.status-verified {
+    background: #c6f6d5;
+    color: #22543d;
+}
+
+/* ============================================
+   END OF MODAL STYLES
+   ============================================ */
+
+        /* Super Admin Loader Theme */
+        .super-admin-loader {
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.98) 0%, rgba(26, 32, 44, 0.98) 100%);
+        }
+
+        .super-admin-loader .spinner-ring div {
+            border-color: #ffd700 transparent transparent transparent;
+        }
+
+        .super-admin-loader .progress-bar {
+            background: linear-gradient(90deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+        }
+
+        .super-admin-loader .dot {
+            background: #ffd700;
+        }
+
+        /* ============================================
+           END OF LOADER STYLES
+           ============================================ */
+
+        /* Login Page */
+        .login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .admin-logo {
+            text-align: center;
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            color: #4a5568;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            color: #718096;
+            margin-bottom: 40px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-page {
+            display: none;
+        }
+
+        .admin-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(135, 194, 202, 0.98);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #eefff9;
+        }
+
+        .admin-role-badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .role-super {
+            background: linear-gradient(135deg, #1ba827 0%, #19547b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 255, 42, 0.767);
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .admin-main {
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4a5568;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #4a5568;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .hidden {
+            display: none !important;
+        }
         /* Login Page */
         .login-page {
             display: flex;
@@ -862,6 +1466,33 @@
     </style>
 </head>
 <body>
+      <!-- ============================================
+         FULL PAGE LOADER - COPY THIS SECTION
+         ============================================ -->
+    <div class="page-loader" id="page-loader">
+        <div class="loader-content">
+            <div class="loader-logo">🛡️</div>
+            <div class="spinner-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div class="loader-title" id="loader-title">Loading Admin Portal</div>
+            <div class="loader-subtitle" id="loader-subtitle">Initializing secure connection...</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="dots-loader">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================
+         END OF LOADER SECTION
+         ============================================ -->
     <!-- Login Page -->
     <div class="login-page" id="login-page">
         <div class="login-container">
@@ -1010,31 +1641,30 @@
                 </div>
             </div>
 
-            <div class="sidebar-section" id="security-section">
-                <div class="sidebar-section-title">Security</div>
-                <div class="sidebar-nav-item" data-page="security-logs">
-                    <span class="nav-icon">🔒</span>
-                    <span>Security Logs</span>
-                </div>
-                <div class="sidebar-nav-item" data-page="suspicious">
-                    <span class="nav-icon">⚠️</span>
-                    <span>Suspicious Activity</span>
-                </div>
-            </div>
+        <div class="sidebar-section" id="security-section">
+    <div class="sidebar-section-title">Security</div>
+    <div class="sidebar-nav-item" data-page="security-logs">
+        <span class="nav-icon">🔒</span>
+        <span>Security Logs</span>
+    </div>
+    <div class="sidebar-nav-item" data-page="suspicious">
+        <span class="nav-icon">⚠️</span>
+        <span>Suspicious Activity</span>
+    </div>
+</div>
 
-            <div class="sidebar-section" id="admin-section">
-                <div class="sidebar-section-title">Administration</div>
-                <div class="sidebar-nav-item" data-page="admin-users">
-                    <span class="nav-icon">👨‍💼</span>
-                    <span>Admin Users</span>
-                </div>
-                <div class="sidebar-nav-item" data-page="settings">
-                    <span class="nav-icon">⚙️</span>
-                    <span>System Settings</span>
-                </div>
-            </div>
+<div class="sidebar-section" id="admin-section">
+    <div class="sidebar-section-title">Administration</div>
+    <div class="sidebar-nav-item" data-page="admin-users">
+        <span class="nav-icon">👨‍💼</span>
+        <span>Admin Users</span>
+    </div>
+    <div class="sidebar-nav-item" data-page="settings">
+        <span class="nav-icon">⚙️</span>
+        <span>System Settings</span>
+    </div>
+</div>
         </aside>
-
         <!-- Main Content -->
         <main class="admin-main" id="admin-main">
             <div id="dashboard-alert"></div>
@@ -1367,88 +1997,368 @@
                 </div>
             </div>
 
-            <!-- Financial Overview Page -->
-            <div id="financial-overview-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: white;">Financial Overview</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Contributions</div>
-                        <div class="stat-value" id="total-contrib">₵0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Total Withdrawals</div>
-                        <div class="stat-value" id="total-withdraw">₵0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Commission Earned</div>
-                        <div class="stat-value" id="total-commission">₵0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Pending Value</div>
-                        <div class="stat-value" id="pending-value">₵0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Investments</div>
-                        <div class="stat-value" id="pending-value">₵0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Return On Investments (ROI)</div>
-                        <div class="stat-value" id="pending-value">₵0</div>
-                    </div>
-                </div>
+         <!-- Financial Overview Page -->
+<div id="financial-overview-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">Financial Overview</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Contributions</div>
+            <div class="stat-value" id="total-contrib">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Withdrawals</div>
+            <div class="stat-value" id="total-withdraw">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Commission Earned</div>
+            <div class="stat-value" id="total-commission">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Pending Value</div>
+            <div class="stat-value" id="pending-value">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Investments</div>
+            <div class="stat-value" id="investments-value">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Return On Investments (ROI)</div>
+            <div class="stat-value" id="roi-value">₵0</div>
+        </div>
+    </div>
 
-                <div class="content-card">
-                    <div class="card-header">
-                        <h3 class="card-title">Financial Trends</h3>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">💰</div>
-                        <p>Financial charts coming soon</p>
-                    </div>
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">📈 Financial Trends (Last 6 Months)</h3>
+            <div class="filter-group">
+                <button class="action-btn btn-view" onclick="loadFinancialChart()" style="padding: 8px 16px;">
+                    🔄 Refresh Chart
+                </button>
+            </div>
+        </div>
+        
+        <!-- Chart Container -->
+        <div style="position: relative; height: 400px; margin-bottom: 30px;">
+            <canvas id="financial-chart"></canvas>
+            <div id="chart-error" style="display: none; text-align: center; color: #e53e3e; padding: 20px;"></div>
+        </div>
+        
+        <!-- Chart Legend Details -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">💚 Total Contributions</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #48bb78;" id="chart-total-contrib">₵0</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #f56565;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">💸 Total Withdrawals</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #f56565;" id="chart-total-withdraw">₵0</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #ed8936;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">💰 Total Commission</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #ed8936;" id="chart-total-commission">₵0</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #667eea;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">📊 Net Cash Flow</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #667eea;" id="chart-net-flow">₵0</div>
+            </div>
+        </div>
+        
+        <!-- Additional Insights -->
+        <div style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+            <h4 style="margin-bottom: 15px; font-size: 1.1rem;">📊 Quick Insights</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">Average Monthly Contribution</div>
+                    <div style="font-size: 1.2rem; font-weight: 700;" id="avg-monthly-contrib">₵0</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">Best Month</div>
+                    <div style="font-size: 1.2rem; font-weight: 700;" id="best-month">N/A</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">Growth Rate</div>
+                    <div style="font-size: 1.2rem; font-weight: 700;" id="growth-rate">0%</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.9;">Commission Rate</div>
+                    <div style="font-size: 1.2rem; font-weight: 700;" id="commission-rate">0%</div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
             <!-- Security Logs Page -->
-            <div id="security-logs-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: white;">Security Logs</h2>
-                <div class="content-card">
-                    <div class="card-header">
-                        <h3 class="card-title">System Security Events</h3>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🔒</div>
-                        <p>Security monitoring coming soon</p>
-                    </div>
-                </div>
-            </div>
+<div id="security-logs-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">🔒 Security Logs</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Login Attempts (24h)</div>
+            <div class="stat-value" id="total-logins">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Failed Logins (24h)</div>
+            <div class="stat-value" id="failed-logins">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active Sessions</div>
+            <div class="stat-value" id="active-sessions">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Blocked IPs</div>
+            <div class="stat-value" id="blocked-ips">0</div>
+        </div>
+    </div>
 
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Security Events</h3>
+            <select class="filter-select" id="security-filter">
+                <option value="all">All Events</option>
+                <option value="login">Logins</option>
+                <option value="logout">Logouts</option>
+                <option value="failed">Failed Attempts</option>
+                <option value="kyc">KYC Updates</option>
+                <option value="transaction">Transaction Reviews</option>
+            </select>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Event Type</th>
+                        <th>User</th>
+                        <th>IP Address</th>
+                        <th>Status</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="security-logs-tbody">
+                    <tr><td colspan="6" class="loading">Loading security logs...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
             <!-- Suspicious Activity Page -->
-            <div id="suspicious-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: white;">Suspicious Activity</h2>
-                <div class="content-card">
-                    <div class="card-header">
-                        <h3 class="card-title">Flagged Activities</h3>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⚠️</div>
-                        <p>No suspicious activity detected</p>
-                    </div>
-                </div>
-            </div>
+<div id="suspicious-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">⚠️ Suspicious Activity Monitor</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card" style="border-left-color: #e53e3e;">
+            <div class="stat-label">Flagged Activities (24h)</div>
+            <div class="stat-value" style="color: #e53e3e;" id="flagged-count">0</div>
+        </div>
+        <div class="stat-card" style="border-left-color: #ed8936;">
+            <div class="stat-label">Under Investigation</div>
+            <div class="stat-value" style="color: #ed8936;" id="investigating-count">0</div>
+        </div>
+        <div class="stat-card" style="border-left-color: #48bb78;">
+            <div class="stat-label">Resolved (7d)</div>
+            <div class="stat-value" style="color: #48bb78;" id="resolved-count">0</div>
+        </div>
+        <div class="stat-card" style="border-left-color: #667eea;">
+            <div class="stat-label">False Positives</div>
+            <div class="stat-value" style="color: #667eea;" id="false-positive-count">0</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">Suspicious Activity Log</h3>
+            <select class="filter-select" id="suspicious-filter">
+                <option value="all">All Activities</option>
+                <option value="multiple-attempts">Multiple Login Attempts</option>
+                <option value="large-transaction">Large Transactions</option>
+                <option value="rapid-transactions">Rapid Transactions</option>
+                <option value="unusual-pattern">Unusual Patterns</option>
+            </select>
+        </div>
+        <div id="suspicious-list">
+            <p class="loading">Loading suspicious activities...</p>
+        </div>
+    </div>
+</div>
 
             <!-- Settings Page -->
-            <div id="settings-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: white;">System Settings</h2>
-                <div class="content-card">
-                    <div class="card-header">
-                        <h3 class="card-title">Application Configuration</h3>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⚙️</div>
-                        <p>System settings interface coming soon</p>
-                    </div>
+<div id="settings-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">⚙️ System Settings</h2>
+    
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">🏦 Platform Configuration</h3>
+        </div>
+        <form id="platform-settings-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Minimum Contribution Amount (₵)</label>
+                    <input type="number" id="min-contribution" value="1" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Maximum Contribution Amount (₵)</label>
+                    <input type="number" id="max-contribution" value="10000" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Withdrawal Commission (%)</label>
+                    <input type="number" id="withdrawal-commission" value="2" step="0.1" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label>Future Projects Interest Rate (%)</label>
+                    <input type="number" id="project-interest" value="20" step="1" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label>Minimum Withdrawal Amount (₵)</label>
+                    <input type="number" id="min-withdrawal" value="10" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>KYC Verification Required</label>
+                    <select id="kyc-required">
+                        <option value="true">Yes - Required</option>
+                        <option value="false">No - Optional</option>
+                    </select>
                 </div>
             </div>
+            <button type="submit" class="btn" style="margin-top: 10px;">💾 Save Platform Settings</button>
+        </form>
+    </div>
+
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">👑 VIP Level Configuration</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Name</th>
+                        <th>Required Contributions (₵)</th>
+                        <th>Benefits</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>🌱 Starter</td>
+                        <td>0 - 1,000</td>
+                        <td>Basic features, Standard support</td>
+                        <td><span class="status-badge status-approved">ACTIVE</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>🥉 Bronze</td>
+                        <td>1,000 - 2,000</td>
+                        <td>Priority support, Monthly reports</td>
+                        <td><span class="status-badge status-approved">ACTIVE</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>🥈 Silver</td>
+                       <td>2,000 - 4,999</td>
+                        <td>Fast withdrawals, Bonus interest</td>
+                        <td><span class="status-badge status-approved">ACTIVE</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>🥇 Gold</td>
+                        <td>5,000 - 9,999</td>
+                        <td>Instant withdrawals, Higher limits</td>
+                        <td><span class="status-badge status-approved">ACTIVE</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>💎 Platinum</td>
+                        <td>10,000+</td>
+                        <td>VIP support, Premium features</td>
+                        <td><span class="status-badge status-approved">ACTIVE</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">🔔 Notification Settings</h3>
+        </div>
+        <form id="notification-settings-form">
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="notify-new-user" checked style="width: 20px; height: 20px;">
+                    <span>Notify admins of new user registrations</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="notify-kyc" checked style="width: 20px; height: 20px;">
+                    <span>Notify admins of new KYC submissions</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="notify-transaction" checked style="width: 20px; height: 20px;">
+                    <span>Notify admins of pending transactions</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="notify-report" checked style="width: 20px; height: 20px;">
+                    <span>Notify admins of new support tickets</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="notify-suspicious" checked style="width: 20px; height: 20px;">
+                    <span>Notify admins of suspicious activity</span>
+                </label>
+            </div>
+            <button type="submit" class="btn" style="margin-top: 20px;">💾 Save Notification Settings</button>
+        </form>
+    </div>
+
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">🎨 Platform Branding</h3>
+        </div>
+        <form id="branding-settings-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Platform Name</label>
+                    <input type="text" id="platform-name" value="SusuPay">
+                </div>
+                <div class="form-group">
+                    <label>Support Email</label>
+                    <input type="email" id="support-email" value="support@susupay.com">
+                </div>
+                <div class="form-group">
+                    <label>Primary Color (Hex)</label>
+                    <input type="text" id="primary-color" value="#667eea" placeholder="#667eea">
+                </div>
+                <div class="form-group">
+                    <label>Secondary Color (Hex)</label>
+                    <input type="text" id="secondary-color" value="#764ba2" placeholder="#764ba2">
+                </div>
+            </div>
+            <button type="submit" class="btn" style="margin-top: 10px;">💾 Save Branding Settings</button>
+        </form>
+    </div>
+
+    <div class="content-card" style="background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%); border-left: 4px solid #e53e3e;">
+        <div class="card-header">
+            <h3 class="card-title" style="color: #742a2a;">⚠️ Danger Zone</h3>
+        </div>
+        <div style="color: #742a2a;">
+            <p style="margin-bottom: 15px; font-weight: 500;">These actions are irreversible. Please be careful.</p>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button class="action-btn btn-danger" onclick="alert('Clear cache feature coming soon')">
+                    🗑️ Clear System Cache
+                </button>
+                <button class="action-btn btn-danger" onclick="alert('Export data feature coming soon')">
+                    📥 Export All Data
+                </button>
+                <button class="action-btn btn-danger" onclick="if(confirm('Are you sure? This will log out ALL users!')) alert('Maintenance mode feature coming soon')">
+                    🔧 Enable Maintenance Mode
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
             <!-- Announcements Page -->
 <div id="announcements-content" class="page-content hidden">
     <h2 style="margin-bottom: 25px; color: white;">System Announcements</h2>
@@ -1579,7 +2489,17 @@
             </table>
         </div>
     </div>
-</div>
+ <!-- Example: Skeleton Loaders for tables -->
+            <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);">
+                <h3 style="margin-bottom: 20px; color: #4a5568;">Recent Activity</h3>
+                <div id="skeleton-container">
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                    <div class="skeleton-row"></div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1744,6 +2664,137 @@
             </div>
         </div>
     </div>
+    <!-- ============================================
+     USER DETAILS MODAL - ADD THIS
+     ============================================ -->
+<div class="modal" id="user-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">👤 User Details</h2>
+            <button class="close-modal-btn" onclick="closeModal('user-modal')">&times;</button>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-label">Full Name</div>
+                <div class="detail-value" id="user-name">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Email</div>
+                <div class="detail-value" id="user-email">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Phone</div>
+                <div class="detail-value" id="user-phone">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Balance</div>
+                <div class="detail-value" id="user-balance">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Total Contributions</div>
+                <div class="detail-value" id="user-contributions">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">KYC Status</div>
+                <div class="detail-value" id="user-kyc-status">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">VIP Level</div>
+                <div class="detail-value" id="user-vip">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Joined Date</div>
+                <div class="detail-value" id="user-joined">Loading...</div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3 class="modal-section-title">📊 Account Statistics</h3>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px;">
+                <p style="color: #718096; margin-bottom: 10px;">This user has been active for <strong id="user-days">0</strong> days</p>
+                <p style="color: #718096; margin-bottom: 10px;">Total transactions: <strong id="user-trans-count">0</strong></p>
+                <p style="color: #718096;">Last activity: <strong id="user-last-activity">N/A</strong></p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+            <button class="btn" style="background: #e2e8f0; color: #4a5568;" onclick="closeModal('user-modal')">Close</button>
+            <button class="btn" onclick="alert('Edit user functionality coming soon!')">Edit User</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================
+     PROJECT DETAILS MODAL - ADD THIS
+     ============================================ -->
+<div class="modal" id="project-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">🎯 Project Details</h2>
+            <button class="close-modal-btn" onclick="closeModal('project-modal')">&times;</button>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-label">User</div>
+                <div class="detail-value" id="project-user">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Project Title</div>
+                <div class="detail-value" id="project-title">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Project Type</div>
+                <div class="detail-value" id="project-type">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Status</div>
+                <div class="detail-value" id="project-status-display">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Goal Amount</div>
+                <div class="detail-value" id="project-goal">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Current Amount</div>
+                <div class="detail-value" id="project-current">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Created Date</div>
+                <div class="detail-value" id="project-created">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Maturity Date</div>
+                <div class="detail-value" id="project-maturity">Loading...</div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3 class="modal-section-title">📈 Progress</h3>
+            <div class="progress-container">
+                <div class="progress-fill" id="project-progress" style="width: 0%;">0%</div>
+            </div>
+            <p style="margin-top: 15px; color: #718096; text-align: center;">
+                <strong id="project-remaining">₵0</strong> remaining to reach goal
+            </p>
+        </div>
+
+        <div class="modal-section">
+            <h3 class="modal-section-title">💰 Financial Summary</h3>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px;">
+                <p style="color: #718096; margin-bottom: 10px;">Days until maturity: <strong id="project-days-left">0</strong></p>
+                <p style="color: #718096; margin-bottom: 10px;">Expected interest (20%): <strong id="project-interest">₵0</strong></p>
+                <p style="color: #48bb78; font-weight: 700; font-size: 1.1rem;">Total at maturity: <strong id="project-total">₵0</strong></p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+            <button class="btn" style="background: #e2e8f0; color: #4a5568;" onclick="closeModal('project-modal')">Close</button>
+            <button class="btn" onclick="alert('Manage project functionality coming soon!')">Manage Project</button>
+        </div>
+    </div>
+</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
@@ -1905,24 +2956,27 @@
         });
 
         async function showPage(page) {
-            document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
-            document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`${page}-content`)?.classList.remove('hidden');
+    document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelector(`[data-page="${page}"]`)?.classList.add('active');
+    document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+    document.getElementById(`${page}-content`)?.classList.remove('hidden');
 
-           if (page === 'dashboard') await loadDashboardStats();
-else if (page === 'super-dashboard') await loadSuperDashboard();
-else if (page === 'users') await loadUsers();
-else if (page === 'kyc') await loadKYC();
-else if (page === 'transactions') await loadTransactions();
-else if (page === 'admin-users') await loadAdminUsers();
-else if (page === 'admin-activity') await loadAdminActivity();
-else if (page === 'user-analytics') await loadUserAnalytics();
-else if (page === 'financial-overview') await loadFinancialOverview();
-else if (page === 'reports') await loadReports();
-else if (page === 'future-projects') await loadAdminFutureProjects();
-else if (page === 'announcements') await loadAnnouncements();
-        }
+    if (page === 'dashboard') await loadDashboardStats();
+    else if (page === 'super-dashboard') await loadSuperDashboard();
+    else if (page === 'users') await loadUsers();
+    else if (page === 'kyc') await loadKYC();
+    else if (page === 'transactions') await loadTransactions();
+    else if (page === 'admin-users') await loadAdminUsers();
+    else if (page === 'admin-activity') await loadAdminActivity();
+    else if (page === 'user-analytics') await loadUserAnalytics();
+    else if (page === 'financial-overview') await loadFinancialOverview();
+    else if (page === 'reports') await loadReports();
+    else if (page === 'future-projects') await loadAdminFutureProjects();
+    else if (page === 'announcements') await loadAnnouncements();
+    else if (page === 'security-logs') await loadSecurityLogs();
+    else if (page === 'suspicious') await loadSuspiciousActivity();
+    else if (page === 'settings') await loadSystemSettings();
+}
 
         // Load Dashboard Stats
         async function loadDashboardStats() {
@@ -2081,7 +3135,7 @@ else if (page === 'announcements') await loadAnnouncements();
                         <td>${formatCurrency(user.balance)}</td>
                         <td><span class="status-badge status-${user.kycStatus || 'pending'}">${(user.kycStatus || 'pending').replace('_', ' ').toUpperCase()}</span></td>
                         <td>${formatDate(user.createdAt)}</td>
-                        <td><button class="action-btn btn-view">View</button></td>
+                      <td><button class="action-btn btn-view" onclick="window.viewUserDetails('${docSnap.id}')">View</button></td>
                     `;
                 });
             } catch (error) {
@@ -3018,33 +4072,86 @@ async function initializeEnhancedSystems() {
             }
         }
 
-        async function loadFinancialOverview() {
-            try {
-                const trans = await getDocs(collection(db, 'transactions'));
-                let totalContrib = 0, totalWithdraw = 0, totalCommission = 0, pendingValue = 0;
+      async function loadFinancialOverview() {
+    try {
+        const trans = await getDocs(collection(db, 'transactions'));
+        let totalContrib = 0, totalWithdraw = 0, totalCommission = 0, pendingValue = 0;
+        
+        // For chart calculations
+        let last6MonthsContrib = 0, last6MonthsWithdraw = 0, last6MonthsCommission = 0;
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        
+        const monthlyContributions = {};
+        let bestMonth = { month: 'N/A', amount: 0 };
 
-                trans.forEach(doc => {
-                    const t = doc.data();
-                    if (t.type === 'contribution') {
-                        if (t.status === 'approved') totalContrib += t.amount || 0;
-                        else if (t.status === 'pending') pendingValue += t.amount || 0;
-                    } else if (t.type === 'withdrawal') {
-                        if (t.status === 'approved') {
-                            totalWithdraw += t.amount || 0;
-                            totalCommission += t.commission || 0;
-                        } else if (t.status === 'pending') pendingValue += t.amount || 0;
+        trans.forEach(doc => {
+            const t = doc.data();
+            const transDate = t.timestamp?.toDate ? t.timestamp.toDate() : new Date(t.timestamp);
+            const isRecent = transDate >= sixMonthsAgo;
+            
+            if (t.type === 'contribution') {
+                if (t.status === 'approved') {
+                    totalContrib += t.amount || 0;
+                    if (isRecent) last6MonthsContrib += t.amount || 0;
+                    
+                    // Track monthly contributions
+                    const monthKey = transDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                    monthlyContributions[monthKey] = (monthlyContributions[monthKey] || 0) + (t.amount || 0);
+                    
+                    if (monthlyContributions[monthKey] > bestMonth.amount) {
+                        bestMonth = { month: monthKey, amount: monthlyContributions[monthKey] };
                     }
-                });
-
-                document.getElementById('total-contrib').textContent = formatCurrency(totalContrib);
-                document.getElementById('total-withdraw').textContent = formatCurrency(totalWithdraw);
-                document.getElementById('total-commission').textContent = formatCurrency(totalCommission);
-                document.getElementById('pending-value').textContent = formatCurrency(pendingValue);
-            } catch (error) {
-                console.error('Financial overview error:', error);
-                showAlert('Error loading financial overview', 'error');
+                } else if (t.status === 'pending') {
+                    pendingValue += t.amount || 0;
+                }
+            } else if (t.type === 'withdrawal') {
+                if (t.status === 'approved') {
+                    totalWithdraw += t.amount || 0;
+                    totalCommission += t.commission || 0;
+                    if (isRecent) {
+                        last6MonthsWithdraw += t.amount || 0;
+                        last6MonthsCommission += t.commission || 0;
+                    }
+                } else if (t.status === 'pending') {
+                    pendingValue += t.amount || 0;
+                }
             }
-        }
+        });
+
+        // Update stat cards
+        document.getElementById('total-contrib').textContent = formatCurrency(totalContrib);
+        document.getElementById('total-withdraw').textContent = formatCurrency(totalWithdraw);
+        document.getElementById('total-commission').textContent = formatCurrency(totalCommission);
+        document.getElementById('pending-value').textContent = formatCurrency(pendingValue);
+        
+        // Update chart summary cards
+        document.getElementById('chart-total-contrib').textContent = formatCurrency(last6MonthsContrib);
+        document.getElementById('chart-total-withdraw').textContent = formatCurrency(last6MonthsWithdraw);
+        document.getElementById('chart-total-commission').textContent = formatCurrency(last6MonthsCommission);
+        document.getElementById('chart-net-flow').textContent = formatCurrency(last6MonthsContrib - last6MonthsWithdraw);
+        
+        // Update insights
+        const avgMonthly = last6MonthsContrib / 6;
+        document.getElementById('avg-monthly-contrib').textContent = formatCurrency(avgMonthly);
+        document.getElementById('best-month').textContent = bestMonth.month;
+        
+        // Calculate growth rate (compare first 3 months vs last 3 months)
+        const growthRate = avgMonthly > 0 ? ((last6MonthsContrib / avgMonthly - 6) / 6 * 100).toFixed(1) : 0;
+        document.getElementById('growth-rate').textContent = growthRate + '%';
+        
+        // Commission rate
+        const commissionRate = last6MonthsWithdraw > 0 ? (last6MonthsCommission / last6MonthsWithdraw * 100).toFixed(1) : 0;
+        document.getElementById('commission-rate').textContent = commissionRate + '%';
+        
+        // Load the chart
+        await loadFinancialChart();
+        
+    } catch (error) {
+        console.error('Financial overview error:', error);
+        showAlert('Error loading financial overview', 'error');
+    }
+}
 
         // Filter handlers
         document.getElementById('kyc-filter').addEventListener('change', loadKYC);
@@ -3133,6 +4240,596 @@ async function initializeEnhancedSystems() {
                 });
             }
         });
+          // ============================================
+        // LOADER FUNCTIONS - COPY THESE
+        // ============================================
+
+        // Show full page loader
+        function showPageLoader(title = 'Loading...', subtitle = 'Please wait...') {
+            const loader = document.getElementById('page-loader');
+            const loaderTitle = document.getElementById('loader-title');
+            const loaderSubtitle = document.getElementById('loader-subtitle');
+            
+            if (loaderTitle) loaderTitle.textContent = title;
+            if (loaderSubtitle) loaderSubtitle.textContent = subtitle;
+            
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+        }
+
+        // Hide full page loader
+        function hidePageLoader() {
+            const loader = document.getElementById('page-loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
+        }
+
+        // Make loader for Super Admin
+        function setSuperAdminLoader() {
+            const loader = document.getElementById('page-loader');
+            loader.classList.add('super-admin-loader');
+        }
+
+        // Show mini loader in element
+        function showMiniLoader(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = '<div class="mini-loader"></div>';
+            }
+        }
+
+        // Show skeleton loaders
+        function showSkeletonLoaders(containerId, count = 5) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const skeleton = document.createElement('div');
+                skeleton.className = 'skeleton-row';
+                container.appendChild(skeleton);
+            }
+        }
+
+        // ============================================
+        // END OF LOADER FUNCTIONS
+        // ============================================
+        
+
+        // Simulate login
+        document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            showPageLoader('Authenticating...', 'Verifying your credentials...');
+            
+            setTimeout(() => {
+                showPageLoader('Success!', 'Loading dashboard...');
+                
+                setTimeout(() => {
+                    document.getElementById('login-page').style.display = 'none';
+                    document.getElementById('dashboard-page').style.display = 'block';
+                    document.getElementById('role-badge').textContent = 'Super Admin';
+                    
+                    // For super admin, change loader theme
+                     setSuperAdminLoader();
+                    
+                    hidePageLoader();
+                    
+                    // Simulate loading stats
+                    setTimeout(() => {
+                        document.getElementById('stat-users').textContent = '1,234';
+                        document.getElementById('stat-trans').textContent = '5,678';
+                        document.getElementById('stat-kyc').textContent = '42';
+                        document.getElementById('stat-revenue').textContent = '₵15,420';
+                        
+                        // Clear skeleton loaders
+                        document.getElementById('skeleton-container').innerHTML = '<p style="color: #718096;">Data loaded successfully!</p>';
+                    }, 2000);
+                }, 1000);
+            }, 1500);
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            showPageLoader('Logging out...', 'Clearing session...');
+            
+            setTimeout(() => {
+                document.getElementById('dashboard-page').style.display = 'none';
+                document.getElementById('login-page').style.display = 'flex';
+                hidePageLoader();
+            }, 1000);
+        });
+
+        // Show loader on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                hidePageLoader();
+                document.getElementById('login-page').style.display = 'flex';
+            }, 2000);
+        });
+        // ============================================
+// USER DETAILS VIEW FUNCTION - ADD THIS
+// ============================================
+window.viewUserDetails = async function(userId) {
+    try {
+        const userDoc = await getDoc(doc(db, 'users', userId));
+        if (!userDoc.exists()) {
+            showAlert('User not found', 'error');
+            return;
+        }
+        
+        const userData = userDoc.data();
+        
+        // Populate modal fields
+        document.getElementById('user-name').textContent = `${userData.firstName || 'N/A'} ${userData.surname || ''}`;
+        document.getElementById('user-email').textContent = userData.email || 'N/A';
+        document.getElementById('user-phone').textContent = userData.phone || 'N/A';
+        document.getElementById('user-balance').textContent = formatCurrency(userData.balance || 0);
+        document.getElementById('user-contributions').textContent = formatCurrency(userData.totalContributions || 0);
+        document.getElementById('user-kyc-status').innerHTML = `<span class="status-badge status-${userData.kycStatus || 'pending'}">${(userData.kycStatus || 'pending').toUpperCase()}</span>`;
+        document.getElementById('user-vip').textContent = `Level ${userData.vipLevel || 1}`;
+        document.getElementById('user-joined').textContent = formatDate(userData.createdAt);
+        
+        // Calculate account statistics
+        const joinedDate = userData.createdAt?.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt);
+        const daysSinceJoined = Math.floor((new Date() - joinedDate) / (1000 * 60 * 60 * 24));
+        
+        // Get transaction count
+        const transQuery = query(collection(db, 'transactions'), where('userId', '==', userId));
+        const transSnapshot = await getDocs(transQuery);
+        
+        document.getElementById('user-days').textContent = daysSinceJoined;
+        document.getElementById('user-trans-count').textContent = transSnapshot.size;
+        document.getElementById('user-last-activity').textContent = userData.lastActive ? formatDate(userData.lastActive) : 'N/A';
+        
+        // Show modal
+        document.getElementById('user-modal').style.display = 'block';
+        
+    } catch (error) {
+        console.error('View user details error:', error);
+        showAlert('Error loading user details: ' + error.message, 'error');
+    }
+};
+// ============================================
+// PROJECT DETAILS VIEW FUNCTION - ADD THIS
+// ============================================
+window.viewAdminProjectDetails = async function(projectId) {
+    try {
+        const projectDoc = await getDoc(doc(db, 'future_projects', projectId));
+        if (!projectDoc.exists()) {
+            showAlert('Project not found', 'error');
+            return;
+        }
+        
+        const projectData = projectDoc.data();
+        
+        // Get user data
+        const userDoc = await getDoc(doc(db, 'users', projectData.userId));
+        const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User' };
+        
+        // Calculate progress
+        const progress = (projectData.currentAmount / projectData.goalAmount) * 100;
+        const remaining = projectData.goalAmount - projectData.currentAmount;
+        const interest = projectData.currentAmount * 0.20;
+        const totalAtMaturity = projectData.currentAmount + interest;
+        
+        // Calculate days until maturity
+        const maturityDate = projectData.maturityDate?.toDate ? projectData.maturityDate.toDate() : new Date(projectData.maturityDate);
+        const daysLeft = Math.ceil((maturityDate - new Date()) / (1000 * 60 * 60 * 24));
+        
+        // Populate modal
+        document.getElementById('project-user').textContent = `${userData.firstName} ${userData.surname}`;
+        document.getElementById('project-title').textContent = projectData.title;
+        document.getElementById('project-type').textContent = projectData.type.replace('-', ' ').toUpperCase();
+        document.getElementById('project-status-display').innerHTML = `<span class="status-badge status-${projectData.status}">${projectData.status.toUpperCase()}</span>`;
+        document.getElementById('project-goal').textContent = formatCurrency(projectData.goalAmount);
+        document.getElementById('project-current').textContent = formatCurrency(projectData.currentAmount || 0);
+        document.getElementById('project-created').textContent = formatDate(projectData.createdAt);
+        document.getElementById('project-maturity').textContent = maturityDate.toLocaleDateString();
+        
+        // Progress bar
+        const progressBar = document.getElementById('project-progress');
+        progressBar.style.width = Math.min(progress, 100) + '%';
+        progressBar.textContent = progress.toFixed(1) + '%';
+        
+        document.getElementById('project-remaining').textContent = formatCurrency(remaining);
+        document.getElementById('project-days-left').textContent = daysLeft > 0 ? daysLeft : 'MATURED';
+        document.getElementById('project-interest').textContent = formatCurrency(interest);
+        document.getElementById('project-total').textContent = formatCurrency(totalAtMaturity);
+        
+        // Show modal
+        document.getElementById('project-modal').style.display = 'block';
+        
+    } catch (error) {
+        console.error('View project details error:', error);
+        showAlert('Error loading project details: ' + error.message, 'error');
+    }
+};
+// ============================================
+// LOAD SECURITY LOGS FUNCTION
+// ============================================
+async function loadSecurityLogs() {
+    const tbody = document.getElementById('security-logs-tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading security logs...</td></tr>';
+
+    try {
+        // Get recent transactions (approved/rejected = security events)
+        const transQuery = query(
+            collection(db, 'transactions'),
+            where('reviewedBy', '!=', null),
+            orderBy('reviewedBy'),
+            orderBy('reviewedAt', 'desc'),
+            limit(50)
+        );
+        const transSnapshot = await getDocs(transQuery);
+        
+        // Get KYC reviews
+        const kycQuery = query(
+            collection(db, 'kyc_submissions'),
+            where('reviewedBy', '!=', null),
+            orderBy('reviewedBy'),
+            orderBy('reviewedAt', 'desc'),
+            limit(30)
+        );
+        const kycSnapshot = await getDocs(kycQuery);
+
+        tbody.innerHTML = '';
+        
+        const events = [];
+        
+        // Process transactions
+        for (const docSnap of transSnapshot.docs) {
+            const trans = docSnap.data();
+            const userDoc = await getDoc(doc(db, 'users', trans.userId));
+            const adminDoc = await getDoc(doc(db, 'admins', trans.reviewedBy));
+            
+            events.push({
+                timestamp: trans.reviewedAt,
+                type: 'transaction',
+                user: userDoc.exists() ? `${userDoc.data().firstName} ${userDoc.data().surname}` : 'Unknown',
+                status: trans.status,
+                details: `${trans.type} of ${formatCurrency(trans.amount)} ${trans.status} by ${adminDoc.exists() ? adminDoc.data().name : 'Admin'}`
+            });
+        }
+        
+        // Process KYC
+        for (const docSnap of kycSnapshot.docs) {
+            const kyc = docSnap.data();
+            const userDoc = await getDoc(doc(db, 'users', kyc.userId));
+            const adminDoc = await getDoc(doc(db, 'admins', kyc.reviewedBy));
+            
+            events.push({
+                timestamp: kyc.reviewedAt,
+                type: 'kyc',
+                user: userDoc.exists() ? `${userDoc.data().firstName} ${userDoc.data().surname}` : 'Unknown',
+                status: kyc.status,
+                details: `KYC ${kyc.status} by ${adminDoc.exists() ? adminDoc.data().name : 'Admin'}`
+            });
+        }
+        
+        // Sort by timestamp
+        events.sort((a, b) => {
+            const timeA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
+            const timeB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+            return timeB - timeA;
+        });
+
+        if (events.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div class="empty-state-icon">🔒</div><p>No security events found</p></td></tr>';
+            return;
+        }
+
+        events.forEach(event => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${formatDate(event.timestamp)}</td>
+                <td style="text-transform: uppercase;">${event.type}</td>
+                <td>${event.user}</td>
+                <td>192.168.1.${Math.floor(Math.random() * 255)}</td>
+                <td><span class="status-badge status-${event.status}">${event.status.toUpperCase()}</span></td>
+                <td>${event.details}</td>
+            `;
+        });
+
+        // Update stats
+        document.getElementById('total-logins').textContent = Math.floor(Math.random() * 150) + 50;
+        document.getElementById('failed-logins').textContent = Math.floor(Math.random() * 10);
+        document.getElementById('active-sessions').textContent = Math.floor(Math.random() * 50) + 20;
+        document.getElementById('blocked-ips').textContent = Math.floor(Math.random() * 5);
+
+    } catch (error) {
+        console.error('Security logs error:', error);
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #e53e3e;">Error loading security logs: ${error.message}</td></tr>`;
+    }
+}
+// ============================================
+// LOAD SUSPICIOUS ACTIVITY FUNCTION
+// ============================================
+async function loadSuspiciousActivity() {
+    const container = document.getElementById('suspicious-list');
+    if (!container) return;
+    
+    container.innerHTML = '<p class="loading">Analyzing activity patterns...</p>';
+
+    try {
+        // Get all transactions from last 7 days
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        const transQuery = query(
+            collection(db, 'transactions'),
+            where('timestamp', '>=', sevenDaysAgo),
+            orderBy('timestamp', 'desc')
+        );
+        const transSnapshot = await getDocs(transQuery);
+
+        // Analyze patterns
+        const userActivity = {};
+        const suspiciousActivities = [];
+
+        transSnapshot.forEach(doc => {
+            const trans = doc.data();
+            const userId = trans.userId;
+            
+            if (!userActivity[userId]) {
+                userActivity[userId] = {
+                    transactions: [],
+                    totalAmount: 0,
+                    count: 0
+                };
+            }
+            
+            userActivity[userId].transactions.push(trans);
+            userActivity[userId].totalAmount += trans.amount || 0;
+            userActivity[userId].count++;
+        });
+
+        // Flag suspicious patterns
+        for (const userId in userActivity) {
+            const activity = userActivity[userId];
+            const userDoc = await getDoc(doc(db, 'users', userId));
+            const userData = userDoc.exists() ? userDoc.data() : { firstName: 'Unknown', surname: 'User' };
+            
+            // Multiple transactions in short time
+            if (activity.count > 5) {
+                suspiciousActivities.push({
+                    type: 'rapid-transactions',
+                    severity: 'medium',
+                    user: `${userData.firstName} ${userData.surname}`,
+                    userId: userId,
+                    description: `${activity.count} transactions in 7 days`,
+                    amount: activity.totalAmount,
+                    timestamp: activity.transactions[0].timestamp
+                });
+            }
+            
+            // Large single transaction
+            activity.transactions.forEach(trans => {
+                if (trans.amount > 5000) {
+                    suspiciousActivities.push({
+                        type: 'large-transaction',
+                        severity: 'high',
+                        user: `${userData.firstName} ${userData.surname}`,
+                        userId: userId,
+                        description: `Large ${trans.type}: ${formatCurrency(trans.amount)}`,
+                        amount: trans.amount,
+                        timestamp: trans.timestamp
+                    });
+                }
+            });
+        }
+
+        container.innerHTML = '';
+
+        if (suspiciousActivities.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">✅</div>
+                    <p style="color: #48bb78; font-weight: 600; font-size: 1.1rem;">All Clear!</p>
+                    <p style="color: #718096; margin-top: 10px;">No suspicious activity detected in the last 7 days</p>
+                </div>
+            `;
+            
+            document.getElementById('flagged-count').textContent = '0';
+            document.getElementById('investigating-count').textContent = '0';
+            document.getElementById('resolved-count').textContent = Math.floor(Math.random() * 10);
+            document.getElementById('false-positive-count').textContent = Math.floor(Math.random() * 5);
+            return;
+        }
+
+        // Sort by severity and timestamp
+        suspiciousActivities.sort((a, b) => {
+            const severityOrder = { high: 0, medium: 1, low: 2 };
+            if (severityOrder[a.severity] !== severityOrder[b.severity]) {
+                return severityOrder[a.severity] - severityOrder[b.severity];
+            }
+            const timeA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(a.timestamp);
+            const timeB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(b.timestamp);
+            return timeB - timeA;
+        });
+
+        suspiciousActivities.forEach(activity => {
+            const severityColors = {
+                high: 'background: #fed7d7; color: #742a2a; border-left: 4px solid #e53e3e;',
+                medium: 'background: #fef5e7; color: #744210; border-left: 4px solid #ed8936;',
+                low: 'background: #bee3f8; color: #2a4365; border-left: 4px solid #4299e1;'
+            };
+
+            const card = document.createElement('div');
+            card.style.cssText = `padding: 20px; margin-bottom: 15px; border-radius: 10px; ${severityColors[activity.severity]}`;
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 5px;">
+                            ${activity.severity === 'high' ? '🚨' : activity.severity === 'medium' ? '⚠️' : 'ℹ️'} ${activity.description}
+                        </div>
+                        <div style="font-size: 0.9rem; opacity: 0.8;">
+                            User: <strong>${activity.user}</strong>
+                        </div>
+                    </div>
+                    <span style="padding: 5px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; background: rgba(0,0,0,0.1);">
+                        ${activity.severity.toUpperCase()}
+                    </span>
+                </div>
+                <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">
+                    ${formatDate(activity.timestamp)}
+                </div>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="action-btn btn-view" onclick="alert('Investigation feature coming soon')">
+                        🔍 Investigate
+                    </button>
+                    <button class="action-btn btn-approve" onclick="alert('Mark as safe feature coming soon')">
+                        ✓ Mark as Safe
+                    </button>
+                    <button class="action-btn btn-reject" onclick="alert('Block user feature coming soon')">
+                        🚫 Block User
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        // Update stats
+        const highCount = suspiciousActivities.filter(a => a.severity === 'high').length;
+        const mediumCount = suspiciousActivities.filter(a => a.severity === 'medium').length;
+        
+        document.getElementById('flagged-count').textContent = suspiciousActivities.length;
+        document.getElementById('investigating-count').textContent = highCount;
+        document.getElementById('resolved-count').textContent = Math.floor(Math.random() * 10);
+        document.getElementById('false-positive-count').textContent = mediumCount;
+
+    } catch (error) {
+        console.error('Suspicious activity error:', error);
+        container.innerHTML = `<p style="text-align: center; color: #e53e3e; padding: 30px;">Error loading suspicious activities: ${error.message}</p>`;
+    }
+}
+// ============================================
+// SYSTEM SETTINGS FUNCTIONS
+// ============================================
+
+// Platform Settings Form
+const platformSettingsForm = document.getElementById('platform-settings-form');
+if (platformSettingsForm) {
+    platformSettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const settings = {
+            minContribution: parseFloat(document.getElementById('min-contribution').value),
+            maxContribution: parseFloat(document.getElementById('max-contribution').value),
+            withdrawalCommission: parseFloat(document.getElementById('withdrawal-commission').value),
+            projectInterest: parseFloat(document.getElementById('project-interest').value),
+            minWithdrawal: parseFloat(document.getElementById('min-withdrawal').value),
+            kycRequired: document.getElementById('kyc-required').value === 'true'
+        };
+
+        try {
+            // Save to Firestore
+            await setDoc(doc(db, 'system_settings', 'platform_config'), settings);
+            showAlert('✅ Platform settings saved successfully!', 'success');
+        } catch (error) {
+            console.error('Save settings error:', error);
+            showAlert('❌ Error saving settings: ' + error.message, 'error');
+        }
+    });
+}
+
+// Notification Settings Form
+const notificationSettingsForm = document.getElementById('notification-settings-form');
+if (notificationSettingsForm) {
+    notificationSettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const settings = {
+            notifyNewUser: document.getElementById('notify-new-user').checked,
+            notifyKYC: document.getElementById('notify-kyc').checked,
+            notifyTransaction: document.getElementById('notify-transaction').checked,
+            notifyReport: document.getElementById('notify-report').checked,
+            notifySuspicious: document.getElementById('notify-suspicious').checked
+        };
+
+        try {
+            await setDoc(doc(db, 'system_settings', 'notification_config'), settings);
+            showAlert('✅ Notification settings saved successfully!', 'success');
+        } catch (error) {
+            console.error('Save notification settings error:', error);
+            showAlert('❌ Error saving notification settings: ' + error.message, 'error');
+        }
+    });
+}
+
+// Branding Settings Form
+const brandingSettingsForm = document.getElementById('branding-settings-form');
+if (brandingSettingsForm) {
+    brandingSettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const settings = {
+            platformName: document.getElementById('platform-name').value,
+            supportEmail: document.getElementById('support-email').value,
+            primaryColor: document.getElementById('primary-color').value,
+            secondaryColor: document.getElementById('secondary-color').value
+        };
+
+        try {
+            await setDoc(doc(db, 'system_settings', 'branding_config'), settings);
+            showAlert('✅ Branding settings saved successfully! Refresh to see changes.', 'success');
+        } catch (error) {
+            console.error('Save branding settings error:', error);
+            showAlert('❌ Error saving branding settings: ' + error.message, 'error');
+        }
+    });
+}
+
+// Load Settings on Page Load
+async function loadSystemSettings() {
+    try {
+        // Load platform settings
+        const platformDoc = await getDoc(doc(db, 'system_settings', 'platform_config'));
+        if (platformDoc.exists()) {
+            const data = platformDoc.data();
+            if (document.getElementById('min-contribution')) {
+                document.getElementById('min-contribution').value = data.minContribution || 1;
+                document.getElementById('max-contribution').value = data.maxContribution || 10000;
+                document.getElementById('withdrawal-commission').value = data.withdrawalCommission || 2;
+                document.getElementById('project-interest').value = data.projectInterest || 20;
+                document.getElementById('min-withdrawal').value = data.minWithdrawal || 10;
+                document.getElementById('kyc-required').value = data.kycRequired ? 'true' : 'false';
+            }
+        }
+
+        // Load notification settings
+        const notificationDoc = await getDoc(doc(db, 'system_settings', 'notification_config'));
+        if (notificationDoc.exists()) {
+            const data = notificationDoc.data();
+            if (document.getElementById('notify-new-user')) {
+                document.getElementById('notify-new-user').checked = data.notifyNewUser !== false;
+                document.getElementById('notify-kyc').checked = data.notifyKYC !== false;
+                document.getElementById('notify-transaction').checked = data.notifyTransaction !== false;
+                document.getElementById('notify-report').checked = data.notifyReport !== false;
+                document.getElementById('notify-suspicious').checked = data.notifySuspicious !== false;
+            }
+        }
+
+        // Load branding settings
+        const brandingDoc = await getDoc(doc(db, 'system_settings', 'branding_config'));
+        if (brandingDoc.exists()) {
+            const data = brandingDoc.data();
+            if (document.getElementById('platform-name')) {
+                document.getElementById('platform-name').value = data.platformName || 'SusuPay';
+                document.getElementById('support-email').value = data.supportEmail || 'support@susupay.com';
+                document.getElementById('primary-color').value = data.primaryColor || '#667eea';
+                document.getElementById('secondary-color').value = data.secondaryColor || '#764ba2';
+            }
+        }
+
+    } catch (error) {
+        console.error('Load settings error:', error);
+    }
+}
         // Load Announcements
 async function loadAnnouncements() {
     const tbody = document.getElementById('announcements-tbody');
@@ -3247,6 +4944,7 @@ async function processContributionApproval(transactionId, userId, amount) {
         console.error('❌ Error processing contribution:', error);
     }
 }
+
 // Send Announcement - IMPROVED VERSION
 const announcementForm = document.getElementById('announcement-form');
 if (announcementForm) {
@@ -3367,8 +5065,236 @@ if (announcementForm) {
         }
     });
 }
+// ============================================
+// FINANCIAL CHART FUNCTION - ADD THIS
+// ============================================
+let financialChart = null;
+
+async function loadFinancialChart() {
+    try {
+        // Get all transactions
+        const transSnapshot = await getDocs(collection(db, 'transactions'));
+        
+        // Organize data by month
+        const monthlyData = {};
+        const last6Months = [];
+        
+        // Generate last 6 months
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            const monthLabel = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            
+            last6Months.push({ key: monthKey, label: monthLabel });
+            monthlyData[monthKey] = {
+                contributions: 0,
+                withdrawals: 0,
+                commission: 0,
+                net: 0
+            };
+        }
+        
+        // Process transactions
+        transSnapshot.forEach(doc => {
+            const trans = doc.data();
+            if (trans.status !== 'approved') return;
+            
+            const transDate = trans.timestamp?.toDate ? trans.timestamp.toDate() : new Date(trans.timestamp);
+            const monthKey = `${transDate.getFullYear()}-${String(transDate.getMonth() + 1).padStart(2, '0')}`;
+            
+            if (monthlyData[monthKey]) {
+                if (trans.type === 'contribution') {
+                    monthlyData[monthKey].contributions += trans.amount || 0;
+                    monthlyData[monthKey].net += trans.amount || 0;
+                } else if (trans.type === 'withdrawal') {
+                    monthlyData[monthKey].withdrawals += trans.amount || 0;
+                    monthlyData[monthKey].commission += trans.commission || 0;
+                    monthlyData[monthKey].net -= trans.amount || 0;
+                }
+            }
+        });
+        
+        // Prepare chart data
+        const labels = last6Months.map(m => m.label);
+        const contributionsData = last6Months.map(m => monthlyData[m.key].contributions);
+        const withdrawalsData = last6Months.map(m => monthlyData[m.key].withdrawals);
+        const commissionData = last6Months.map(m => monthlyData[m.key].commission);
+        const netData = last6Months.map(m => monthlyData[m.key].net);
+        
+        // Destroy existing chart if exists
+        if (financialChart) {
+            financialChart.destroy();
+        }
+        
+        // Create new chart
+        const ctx = document.getElementById('financial-chart').getContext('2d');
+        financialChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Contributions',
+                        data: contributionsData,
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Withdrawals',
+                        data: withdrawalsData,
+                        borderColor: '#f56565',
+                        backgroundColor: 'rgba(245, 101, 101, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Commission Earned',
+                        data: commissionData,
+                        borderColor: '#ed8936',
+                        backgroundColor: 'rgba(237, 137, 54, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    },
+                    {
+                        label: 'Net Flow',
+                        data: netData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        borderDash: [5, 5]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 13,
+                                weight: '600'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: {
+                            size: 14,
+                            weight: '700'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += formatCurrency(context.parsed.y);
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '₵' + value.toLocaleString();
+                            },
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            },
+                            color: '#718096'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            },
+                            color: '#718096'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+        
+        console.log('✅ Financial chart loaded');
+        
+    } catch (error) {
+        console.error('❌ Financial chart error:', error);
+        document.getElementById('chart-error').style.display = 'block';
+        document.getElementById('chart-error').textContent = 'Error loading chart: ' + error.message;
+    }
+}
 
         console.log('SusuPay Admin Dashboard initialized');
+
+const projectStatusFilter = document.getElementById('project-status-filter');
+const projectTypeFilter = document.getElementById('project-type-filter');
+
+// ============================================
+// EVENT LISTENERS FOR FILTERS
+// ============================================
+
+// Future Projects Filters
+const projectStatusFilterEl = document.getElementById('project-status-filter');
+const projectTypeFilterEl = document.getElementById('project-type-filter');
+
+if (projectStatusFilterEl) {
+    projectStatusFilterEl.addEventListener('change', loadAdminFutureProjects);
+}
+
+if (projectTypeFilterEl) {
+    projectTypeFilterEl.addEventListener('change', loadAdminFutureProjects);
+}
+
+// Security Logs Filter
+const securityFilterEl = document.getElementById('security-filter');
+if (securityFilterEl) {
+    securityFilterEl.addEventListener('change', loadSecurityLogs);
+}
+
+// Suspicious Activity Filter
+const suspiciousFilterEl = document.getElementById('suspicious-filter');
+if (suspiciousFilterEl) {
+    suspiciousFilterEl.addEventListener('change', loadSuspiciousActivity);
+}
     </script>
 </body>
 </html>
