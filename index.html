@@ -1964,39 +1964,148 @@
                 </div>
             </div>
 
-            <!-- User Analytics Page -->
-            <div id="user-analytics-content" class="page-content hidden">
-                <h2 style="margin-bottom: 25px; color: white;">User Analytics</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Active Users (30d)</div>
-                        <div class="stat-value" id="active-users">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">New Signups (7d)</div>
-                        <div class="stat-value" id="new-signups">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">KYC Verified</div>
-                        <div class="stat-value" id="kyc-verified">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Average Balance</div>
-                        <div class="stat-value" id="avg-balance">₵0</div>
-                    </div>
-                </div>
+           <!-- User Analytics Page -->
+<div id="user-analytics-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">📊 User Analytics</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="analytics-total-users">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active Users (30d)</div>
+            <div class="stat-value" id="active-users">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">New Signups (7d)</div>
+            <div class="stat-value" id="new-signups">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">KYC Verified</div>
+            <div class="stat-value" id="kyc-verified">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Average Balance</div>
+            <div class="stat-value" id="avg-balance">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Balance Pool</div>
+            <div class="stat-value" id="total-balance-pool">₵0</div>
+        </div>
+    </div>
 
-                <div class="content-card">
-                    <div class="card-header">
-                        <h3 class="card-title">User Growth Chart</h3>
-                    </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📈</div>
-                        <p>Analytics visualization coming soon</p>
-                    </div>
-                </div>
+    <!-- User Growth Chart -->
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">📈 User Growth Trend</h3>
+            <div class="filter-group">
+                <select class="filter-select" id="analytics-period-filter" onchange="loadUserAnalytics()">
+                    <option value="6">Last 6 Months</option>
+                    <option value="12">Last 12 Months</option>
+                    <option value="3">Last 3 Months</option>
+                </select>
+                <button class="action-btn btn-view" onclick="loadUserAnalytics()" style="padding: 8px 16px;">
+                    🔄 Refresh
+                </button>
             </div>
+        </div>
+        
+        <div style="position: relative; height: 400px; margin-bottom: 30px;">
+            <canvas id="user-growth-chart"></canvas>
+            <div id="analytics-chart-error" style="display: none; text-align: center; color: #e53e3e; padding: 20px;"></div>
+        </div>
 
+        <!-- Growth Stats -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #48bb78;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">👥 Total Signups</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #48bb78;" id="chart-total-signups">0</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #667eea;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">📊 Average per Month</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #667eea;" id="chart-avg-signups">0</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #ed8936;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">🚀 Best Month</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #ed8936;" id="chart-best-signup-month">N/A</div>
+            </div>
+            <div style="background: #f7fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #f56565;">
+                <div style="font-size: 0.85rem; color: #718096; margin-bottom: 5px;">📈 Growth Rate</div>
+                <div style="font-size: 1.3rem; font-weight: 700; color: #f56565;" id="chart-growth-rate">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIP Distribution Chart -->
+    <div class="content-card" style="margin-bottom: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">👑 VIP Level Distribution</h3>
+        </div>
+        
+        <div style="position: relative; height: 350px;">
+            <canvas id="vip-distribution-chart"></canvas>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px;">
+            <div style="text-align: center; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <div style="font-size: 1.5rem;">🌱</div>
+                <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Starter</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #4a5568;" id="vip-level-1">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <div style="font-size: 1.5rem;">🥉</div>
+                <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Bronze</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #4a5568;" id="vip-level-2">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <div style="font-size: 1.5rem;">🥈</div>
+                <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Silver</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #4a5568;" id="vip-level-3">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <div style="font-size: 1.5rem;">🥇</div>
+                <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Gold</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #4a5568;" id="vip-level-4">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #f7fafc; border-radius: 10px;">
+                <div style="font-size: 1.5rem;">💎</div>
+                <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Platinum</div>
+                <div style="font-size: 1.2rem; font-weight: 700; color: #4a5568;" id="vip-level-5">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KYC Status Chart -->
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">🛡️ KYC Verification Status</h3>
+        </div>
+        
+        <div style="position: relative; height: 300px;">
+            <canvas id="kyc-status-chart"></canvas>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+            <div style="text-align: center; padding: 15px; background: #c6f6d5; border-radius: 10px;">
+                <div style="font-size: 0.8rem; color: #22543d; margin-bottom: 5px;">✅ Approved</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #22543d;" id="kyc-approved-count">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #bee3f8; border-radius: 10px;">
+                <div style="font-size: 0.8rem; color: #2a4365; margin-bottom: 5px;">⏳ Under Review</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #2a4365;" id="kyc-pending-count">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #fed7d7; border-radius: 10px;">
+                <div style="font-size: 0.8rem; color: #742a2a; margin-bottom: 5px;">❌ Rejected</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #742a2a;" id="kyc-rejected-count">0</div>
+            </div>
+            <div style="text-align: center; padding: 15px; background: #fef5e7; border-radius: 10px;">
+                <div style="font-size: 0.8rem; color: #744210; margin-bottom: 5px;">⚪ Not Submitted</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: #744210;" id="kyc-none-count">0</div>
+            </div>
+        </div>
+    </div>
+</div>
          <!-- Financial Overview Page -->
 <div id="financial-overview-content" class="page-content hidden">
     <h2 style="margin-bottom: 25px; color: white;">Financial Overview</h2>
@@ -2976,6 +3085,7 @@
     else if (page === 'security-logs') await loadSecurityLogs();
     else if (page === 'suspicious') await loadSuspiciousActivity();
     else if (page === 'settings') await loadSystemSettings();
+    else if (page === 'user-analytics') await loadUserAnalytics();
 }
 
         // Load Dashboard Stats
@@ -4828,6 +4938,360 @@ async function loadSystemSettings() {
 
     } catch (error) {
         console.error('Load settings error:', error);
+    }
+}
+// ============================================
+// USER ANALYTICS CHART FUNCTIONS
+// ============================================
+let userGrowthChart = null;
+let vipDistributionChart = null;
+let kycStatusChart = null;
+ {
+    try {
+        console.log('📊 Loading user analytics...');
+        
+        // Get all users
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        const users = [];
+        
+        usersSnapshot.forEach(doc => {
+            const userData = doc.data();
+            users.push({
+                id: doc.id,
+                ...userData,
+                createdAt: userData.createdAt?.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt)
+            });
+        });
+
+        // Calculate basic stats
+        let totalBalance = 0;
+        let kycVerified = 0;
+        let activeUsers = 0;
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        let newSignups = 0;
+
+        // VIP level counts
+        const vipCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+        // KYC status counts
+        const kycCounts = { approved: 0, under_review: 0, rejected: 0, none: 0 };
+
+        users.forEach(user => {
+            totalBalance += user.balance || 0;
+            if (user.kycStatus === 'approved') kycVerified++;
+            if (user.lastActive && new Date(user.lastActive) >= thirtyDaysAgo) activeUsers++;
+            if (user.createdAt >= sevenDaysAgo) newSignups++;
+            
+            // VIP distribution
+            const vipLevel = user.vipLevel || 1;
+            if (vipCounts[vipLevel] !== undefined) vipCounts[vipLevel]++;
+
+            // KYC distribution
+            const kycStatus = user.kycStatus || 'none';
+            if (kycCounts[kycStatus]) kycCounts[kycStatus]++;
+            else kycCounts.none++;
+        });
+
+        const avgBalance = users.length > 0 ? totalBalance / users.length : 0;
+
+        // Update stat cards
+        document.getElementById('analytics-total-users').textContent = users.length;
+        document.getElementById('active-users').textContent = activeUsers;
+        document.getElementById('new-signups').textContent = newSignups;
+        document.getElementById('kyc-verified').textContent = kycVerified;
+        document.getElementById('avg-balance').textContent = formatCurrency(avgBalance);
+        document.getElementById('total-balance-pool').textContent = formatCurrency(totalBalance);
+
+        // Update VIP counts
+        for (let level = 1; level <= 5; level++) {
+            document.getElementById(`vip-level-${level}`).textContent = vipCounts[level];
+        }
+
+        // Update KYC counts
+        document.getElementById('kyc-approved-count').textContent = kycCounts.approved;
+        document.getElementById('kyc-pending-count').textContent = kycCounts.under_review;
+        document.getElementById('kyc-rejected-count').textContent = kycCounts.rejected;
+        document.getElementById('kyc-none-count').textContent = kycCounts.none;
+
+        // Load charts
+        await loadUserGrowthChart(users);
+        await loadVIPDistributionChart(vipCounts);
+        await loadKYCStatusChart(kycCounts);
+
+        console.log('✅ User analytics loaded');
+
+    } catch (error) {
+        console.error('❌ User analytics error:', error);
+        showAlert('Error loading user analytics: ' + error.message, 'error');
+    }
+}
+
+// User Growth Chart
+async function loadUserGrowthChart(users) {
+    try {
+        const period = parseInt(document.getElementById('analytics-period-filter')?.value || 6);
+        
+        // Generate months
+        const monthlyData = {};
+        const months = [];
+        
+        for (let i = period - 1; i >= 0; i--) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            const monthLabel = date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+            
+            months.push({ key: monthKey, label: monthLabel });
+            monthlyData[monthKey] = 0;
+        }
+
+        // Count signups per month
+        let totalSignups = 0;
+        let bestMonth = { month: 'N/A', count: 0 };
+
+        users.forEach(user => {
+            const monthKey = `${user.createdAt.getFullYear()}-${String(user.createdAt.getMonth() + 1).padStart(2, '0')}`;
+            if (monthlyData[monthKey] !== undefined) {
+                monthlyData[monthKey]++;
+                totalSignups++;
+                
+                if (monthlyData[monthKey] > bestMonth.count) {
+                    bestMonth = {
+                        month: user.createdAt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                        count: monthlyData[monthKey]
+                    };
+                }
+            }
+        });
+
+        const signupData = months.map(m => monthlyData[m.key]);
+        const avgSignups = (totalSignups / period).toFixed(1);
+        
+        // Calculate growth rate
+        const firstHalf = signupData.slice(0, Math.floor(period / 2)).reduce((a, b) => a + b, 0);
+        const secondHalf = signupData.slice(Math.floor(period / 2)).reduce((a, b) => a + b, 0);
+        const growthRate = firstHalf > 0 ? (((secondHalf - firstHalf) / firstHalf) * 100).toFixed(1) : 0;
+
+        // Update stats
+        document.getElementById('chart-total-signups').textContent = totalSignups;
+        document.getElementById('chart-avg-signups').textContent = avgSignups;
+        document.getElementById('chart-best-signup-month').textContent = bestMonth.month;
+        document.getElementById('chart-growth-rate').textContent = growthRate + '%';
+
+        // Destroy existing chart
+        if (userGrowthChart) {
+            userGrowthChart.destroy();
+        }
+
+        // Create chart
+        const ctx = document.getElementById('user-growth-chart').getContext('2d');
+        userGrowthChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: months.map(m => m.label),
+                datasets: [{
+                    label: 'New Users',
+                    data: signupData,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#667eea',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: { size: 14, weight: '700' },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                return `New Users: ${context.parsed.y}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: { size: 12, weight: '600' },
+                            color: '#718096'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 12, weight: '600' },
+                            color: '#718096'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ User growth chart error:', error);
+        document.getElementById('analytics-chart-error').style.display = 'block';
+        document.getElementById('analytics-chart-error').textContent = 'Error loading chart';
+    }
+}
+
+// VIP Distribution Chart
+async function loadVIPDistributionChart(vipCounts) {
+    try {
+        // Destroy existing chart
+        if (vipDistributionChart) {
+            vipDistributionChart.destroy();
+        }
+
+        const ctx = document.getElementById('vip-distribution-chart').getContext('2d');
+        vipDistributionChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['🌱 Starter', '🥉 Bronze', '🥈 Silver', '🥇 Gold', '💎 Platinum'],
+                datasets: [{
+                    data: [vipCounts[1], vipCounts[2], vipCounts[3], vipCounts[4], vipCounts[5]],
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(237, 137, 54, 0.8)',
+                        'rgba(160, 174, 192, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(138, 43, 226, 0.8)'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 13, weight: '600' },
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        cornerRadius: 8,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ VIP chart error:', error);
+    }
+}
+
+// KYC Status Chart
+async function loadKYCStatusChart(kycCounts) {
+    try {
+        // Destroy existing chart
+        if (kycStatusChart) {
+            kycStatusChart.destroy();
+        }
+
+        const ctx = document.getElementById('kyc-status-chart').getContext('2d');
+        kycStatusChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['✅ Approved', '⏳ Under Review', '❌ Rejected', '⚪ Not Submitted'],
+                datasets: [{
+                    label: 'Users',
+                    data: [kycCounts.approved, kycCounts.under_review, kycCounts.rejected, kycCounts.none],
+                    backgroundColor: [
+                        'rgba(72, 187, 120, 0.8)',
+                        'rgba(66, 153, 225, 0.8)',
+                        'rgba(245, 101, 101, 0.8)',
+                        'rgba(237, 137, 54, 0.8)'
+                    ],
+                    borderColor: [
+                        '#48bb78',
+                        '#4299e1',
+                        '#f56565',
+                        '#ed8936'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            font: { size: 12, weight: '600' },
+                            color: '#718096'
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 12, weight: '600' },
+                            color: '#718096'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ KYC chart error:', error);
     }
 }
         // Load Announcements
