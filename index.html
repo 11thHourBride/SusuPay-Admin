@@ -1597,6 +1597,15 @@
                     <span>Financial Overview</span>
                 </div>
             </div>
+           
+<div class="sidebar-section" id="group-susu-section">
+    <div class="sidebar-section-title">Group Susu</div>
+    <div class="sidebar-nav-item" data-page="group-susu">
+        <span class="nav-icon">⭕</span>
+        <span>Group Susu</span>
+        <span class="pending-badge" id="group-susu-badge">0</span>
+    </div>
+</div>
 
             <div class="sidebar-section">
                 <div class="sidebar-section-title">Main</div>
@@ -2197,6 +2206,94 @@
         </div>
     </div>
 </div>
+<!-- Group Susu Management Page -->
+<div id="group-susu-content" class="page-content hidden">
+    <h2 style="margin-bottom: 25px; color: white;">👥 Group Susu Management</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Groups</div>
+            <div class="stat-value" id="total-groups">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active Groups</div>
+            <div class="stat-value" id="active-groups">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Members</div>
+            <div class="stat-value" id="total-members">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Pool Value</div>
+            <div class="stat-value" id="total-pool-value">₵0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Pending Requests</div>
+            <div class="stat-value" id="pending-requests">0</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Completed Cycles</div>
+            <div class="stat-value" id="completed-cycles">0</div>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="card-header">
+            <h3 class="card-title">All Group Susu</h3>
+            <div class="filter-group">
+                <select class="filter-select" id="group-status-filter" onchange="loadGroupSusu()">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="text" class="search-input" id="group-search" placeholder="Search groups..." onkeyup="searchGroups()">
+            </div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Group Name</th>
+                        <th>Creator</th>
+                        <th>Members</th>
+                        <th>Contribution</th>
+                        <th>Pool Total</th>
+                        <th>Cycle Status</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="group-susu-tbody">
+                    <tr><td colspan="8" class="loading">Loading groups...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Join Requests Section -->
+    <div class="content-card" style="margin-top: 20px;">
+        <div class="card-header">
+            <h3 class="card-title">Pending Join Requests</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Group Name</th>
+                        <th>Requested</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="join-requests-tbody">
+                    <tr><td colspan="5" class="loading">Loading requests...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
             <!-- Security Logs Page -->
 <div id="security-logs-content" class="page-content hidden">
@@ -2611,6 +2708,84 @@
             </div>
         </main>
     </div>
+    <!-- Group Susu Details Modal -->
+<div class="modal" id="group-susu-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">👥 Group Susu Details</h2>
+            <button class="close-modal-btn" onclick="closeModal('group-susu-modal')">&times;</button>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <div class="detail-label">Group Name</div>
+                <div class="detail-value" id="group-name">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Creator</div>
+                <div class="detail-value" id="group-creator">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Total Members</div>
+                <div class="detail-value" id="group-members-count">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Contribution Amount</div>
+                <div class="detail-value" id="group-contribution">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Frequency</div>
+                <div class="detail-value" id="group-frequency">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Total Pool</div>
+                <div class="detail-value" id="group-pool-total">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Created Date</div>
+                <div class="detail-value" id="group-created">Loading...</div>
+            </div>
+            <div class="detail-card">
+                <div class="detail-label">Status</div>
+                <div class="detail-value" id="group-status-display">Loading...</div>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3 class="modal-section-title">📋 Members List</h3>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="data-table" style="margin-top: 0;">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Position</th>
+                            <th>Has Received</th>
+                            <th>Last Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody id="group-members-list">
+                        <tr><td colspan="5" class="loading">Loading members...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-section">
+            <h3 class="modal-section-title">💰 Cycle Progress</h3>
+            <div style="background: #f7fafc; padding: 20px; border-radius: 12px;">
+                <p style="color: #718096; margin-bottom: 10px;">Current Cycle: <strong id="current-cycle">0</strong></p>
+                <p style="color: #718096; margin-bottom: 10px;">Members who received payout: <strong id="received-count">0</strong></p>
+                <p style="color: #718096;">Next recipient: <strong id="next-recipient">TBD</strong></p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+            <button class="btn" style="background: #e2e8f0; color: #4a5568;" onclick="closeModal('group-susu-modal')">Close</button>
+            <button class="btn" style="background: #e53e3e;" onclick="alert('Delete group feature coming soon')">Delete Group</button>
+        </div>
+    </div>
+</div>
 
     <!-- KYC Review Modal -->
     <div class="modal" id="kyc-modal">
@@ -2929,14 +3104,14 @@
         let currentTransReview = null;
         let currentReportReview = null;
 
-        const rolePermissions = {
-    super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports', 'security-logs', 'suspicious', 'settings', 'future-projects', 'announcements'],
-    main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'settings', 'future-projects', 'announcements'],
-    senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'future-projects', 'announcements'],
-    financial: ['dashboard', 'transactions', 'users', 'reports', 'financial-overview', 'future-projects'],
-    support: ['dashboard', 'users', 'reports', 'announcements'],
+       const rolePermissions = {
+    super: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'super-dashboard', 'admin-activity', 'user-analytics', 'financial-overview', 'reports', 'security-logs', 'suspicious', 'settings', 'future-projects', 'announcements', 'group-susu'],
+    main: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'settings', 'future-projects', 'announcements', 'group-susu'],
+    senior: ['dashboard', 'users', 'kyc', 'transactions', 'admin-users', 'reports', 'future-projects', 'announcements', 'group-susu'],
+    financial: ['dashboard', 'transactions', 'users', 'reports', 'financial-overview', 'future-projects', 'group-susu'],
+    support: ['dashboard', 'users', 'reports', 'announcements', 'group-susu'],
     security: ['dashboard', 'users', 'kyc', 'reports', 'security-logs', 'suspicious'],
-    operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports', 'future-projects', 'announcements']
+    operations: ['dashboard', 'users', 'transactions', 'kyc', 'reports', 'future-projects', 'announcements', 'group-susu']
 };
 
         // Utility functions
@@ -2961,6 +3136,207 @@
                 minute: '2-digit'
             });
         }
+        // ============================================
+// GROUP SUSU MANAGEMENT FUNCTIONS
+// ============================================
+
+// Load Group Susu - FIXED VERSION
+async function loadGroupSusu() {
+    const tbody = document.getElementById('group-susu-tbody');
+    tbody.innerHTML = '<tr><td colspan="8" class="loading">Loading groups...</td></tr>';
+
+    try {
+        const statusFilter = document.getElementById('group-status-filter').value;
+        
+        let snapshot;
+        
+        // Simple query without orderBy to avoid index issues
+        if (statusFilter === 'all') {
+            snapshot = await getDocs(collection(db, 'group_susu'));
+        } else {
+            const q = query(collection(db, 'group_susu'), where('status', '==', statusFilter));
+            snapshot = await getDocs(q);
+        }
+
+        tbody.innerHTML = '';
+
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><div class="empty-state-icon">👥</div><p>No groups found</p></td></tr>';
+            
+            // Set all stats to 0
+            document.getElementById('total-groups').textContent = '0';
+            document.getElementById('active-groups').textContent = '0';
+            document.getElementById('total-members').textContent = '0';
+            document.getElementById('total-pool-value').textContent = formatCurrency(0);
+            document.getElementById('completed-cycles').textContent = '0';
+            document.getElementById('pending-requests').textContent = '0';
+            
+            await loadJoinRequests();
+            return;
+        }
+
+        let totalGroups = 0;
+        let activeGroups = 0;
+        let totalMembers = 0;
+        let totalPoolValue = 0;
+        let completedCycles = 0;
+
+        // Convert to array and sort by createdAt manually
+        const groups = [];
+        snapshot.forEach(doc => {
+            groups.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort by createdAt (newest first)
+        groups.sort((a, b) => {
+            const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+            const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+            return dateB - dateA;
+        });
+
+        for (const group of groups) {
+            try {
+                const creatorDoc = await getDoc(doc(db, 'users', group.createdBy));
+                const creatorData = creatorDoc.exists() ? 
+                    creatorDoc.data() : 
+                    { firstName: 'Unknown', surname: 'User' };
+
+                totalGroups++;
+                if (group.status === 'active') activeGroups++;
+                
+                const memberCount = group.members?.length || 0;
+                totalMembers += memberCount;
+                totalPoolValue += group.totalPool || 0;
+                
+                if (group.status === 'completed') completedCycles++;
+
+                const membersReceived = group.members?.filter(m => m.hasReceived).length || 0;
+                const cycleProgress = `${membersReceived}/${memberCount}`;
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="font-weight: 600;">${group.groupName || 'Unnamed Group'}</td>
+                    <td>${creatorData.firstName} ${creatorData.surname}</td>
+                    <td style="text-align: center;">${memberCount}</td>
+                    <td>${formatCurrency(group.contributionAmount || 0)}</td>
+                    <td>${formatCurrency(group.totalPool || 0)}</td>
+                    <td style="text-align: center;">${cycleProgress}</td>
+                    <td><span class="status-badge status-${group.status || 'pending'}">${(group.status || 'pending').toUpperCase()}</span></td>
+                    <td><button class="action-btn btn-view" onclick="window.viewGroupDetails('${group.id}')">View</button></td>
+                `;
+            } catch (groupError) {
+                console.error(`Error loading group ${group.id}:`, groupError);
+                // Continue with next group instead of breaking
+                continue;
+            }
+        }
+
+        // Update stats
+        document.getElementById('total-groups').textContent = totalGroups;
+        document.getElementById('active-groups').textContent = activeGroups;
+        document.getElementById('total-members').textContent = totalMembers;
+        document.getElementById('total-pool-value').textContent = formatCurrency(totalPoolValue);
+        document.getElementById('completed-cycles').textContent = completedCycles;
+
+        // Load join requests
+        await loadJoinRequests();
+
+    } catch (error) {
+        console.error('Group susu error:', error);
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #e53e3e;">
+            <div style="padding: 30px;">
+                <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+                <div style="font-weight: 600; margin-bottom: 10px;">Error loading groups</div>
+                <div style="font-size: 0.9rem; color: #718096;">${error.message}</div>
+            </div>
+        </td></tr>`;
+        
+        // Set stats to 0 on error
+        document.getElementById('total-groups').textContent = '0';
+        document.getElementById('active-groups').textContent = '0';
+        document.getElementById('total-members').textContent = '0';
+        document.getElementById('total-pool-value').textContent = formatCurrency(0);
+        document.getElementById('completed-cycles').textContent = '0';
+    }
+}
+
+// Load Join Requests - FIXED VERSION
+async function loadJoinRequests() {
+    const tbody = document.getElementById('join-requests-tbody');
+    tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading requests...</td></tr>';
+
+    try {
+        // Simple query without orderBy
+        const q = query(collection(db, 'group_join_requests'), where('status', '==', 'pending'));
+        const snapshot = await getDocs(q);
+        
+        tbody.innerHTML = '';
+
+        if (snapshot.empty) {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><div class="empty-state-icon">✅</div><p>No pending requests</p></td></tr>';
+            document.getElementById('group-susu-badge').textContent = '0';
+            document.getElementById('pending-requests').textContent = '0';
+            return;
+        }
+
+        document.getElementById('group-susu-badge').textContent = snapshot.size;
+        document.getElementById('pending-requests').textContent = snapshot.size;
+
+        // Convert to array and sort manually
+        const requests = [];
+        snapshot.forEach(doc => {
+            requests.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Sort by requestedAt (newest first)
+        requests.sort((a, b) => {
+            const dateA = a.requestedAt?.toDate ? a.requestedAt.toDate() : new Date(a.requestedAt || 0);
+            const dateB = b.requestedAt?.toDate ? b.requestedAt.toDate() : new Date(b.requestedAt || 0);
+            return dateB - dateA;
+        });
+
+        for (const request of requests) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', request.userId));
+                const userData = userDoc.exists() ? 
+                    userDoc.data() : 
+                    { firstName: 'Unknown', surname: 'User' };
+                
+                const groupDoc = await getDoc(doc(db, 'group_susu', request.groupId));
+                const groupData = groupDoc.exists() ? 
+                    groupDoc.data() : 
+                    { groupName: 'Unknown Group' };
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${userData.firstName} ${userData.surname}</td>
+                    <td>${groupData.groupName}</td>
+                    <td>${formatDate(request.requestedAt)}</td>
+                    <td><span class="status-badge status-pending">PENDING</span></td>
+                    <td>
+                        <button class="action-btn btn-approve" onclick="window.approveJoinRequest('${request.id}', '${request.userId}', '${request.groupId}')">Approve</button>
+                        <button class="action-btn btn-reject" onclick="window.rejectJoinRequest('${request.id}', '${request.userId}')">Reject</button>
+                    </td>
+                `;
+            } catch (requestError) {
+                console.error(`Error loading request ${request.id}:`, requestError);
+                continue;
+            }
+        }
+
+    } catch (error) {
+        console.error('Join requests error:', error);
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #e53e3e;">
+            <div style="padding: 20px;">
+                <div style="font-weight: 600; margin-bottom: 5px;">Error loading requests</div>
+                <div style="font-size: 0.85rem; color: #718096;">${error.message}</div>
+            </div>
+        </td></tr>`;
+        
+        document.getElementById('group-susu-badge').textContent = '0';
+        document.getElementById('pending-requests').textContent = '0';
+    }
+}
 
         // Login
         document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
@@ -3086,6 +3462,7 @@
     else if (page === 'suspicious') await loadSuspiciousActivity();
     else if (page === 'settings') await loadSystemSettings();
     else if (page === 'user-analytics') await loadUserAnalytics();
+    else if (page === 'group-susu') await loadGroupSusu(); 
 }
 
         // Load Dashboard Stats
